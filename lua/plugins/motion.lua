@@ -1,5 +1,6 @@
---- @type LazyPluginSpec[]
+--- @type (LazyPluginSpec | string)[]
 return {
+  'tpope/vim-surround',
   {
     'jinh0/eyeliner.nvim',
     config = function()
@@ -105,7 +106,6 @@ return {
     opts = { n_lines = 500 },
   },
   {
-    'echasnovski/mini.surround',
     opts = {},
   },
 }
