@@ -41,7 +41,6 @@ return {
     local _, term = vim.iter(pairs(terminals)):find(function(k, v)
       return vim.list_contains(terms, k) and v.cond()
     end)
-
     if term == nil then
       return
     end
@@ -59,6 +58,15 @@ return {
         term.exit()
       end,
       group = group,
+    })
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'LazyLoad',
+      callback = function(args)
+        if args.data == 'bufferline.nvim' then
+          local bufferline_bg = string.format('#%06x', vim.api.nvim_get_hl(0, { name = 'BufferLineFill' }).bg)
+          term.enter(bufferline_bg)
+        end
+      end,
     })
   end,
 }
