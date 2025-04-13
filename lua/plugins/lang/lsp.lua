@@ -19,42 +19,20 @@ return {
         callback = function(event)
           local map = function(keys, func, desc, mode)
             mode = mode or 'n'
-            vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+            local prefix = vim.startswith(keys, 'gr') and '[G]o [R]ef ' or ' '
+            vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. prefix .. desc })
           end
 
-          -- TODO: Upstream maps changed here I think
+          map('grn', vim.lsp.buf.rename, 'Re[n]ame')
+          map('gra', vim.lsp.buf.code_action, '[A]ction', { 'n', 'x' })
+          map('grr', require('telescope.builtin').lsp_references, '[R]eferences')
+          map('gri', require('telescope.builtin').lsp_implementations, '[I]mplementation')
+          map('grd', require('telescope.builtin').lsp_definitions, '[D]efinition')
+          map('grD', vim.lsp.buf.declaration, '[D]eclaration')
+          map('grt', require('telescope.builtin').lsp_type_definitions, '[T]ype')
 
-          -- Jump to the definition of the word under your cursor.
-          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-
-          -- Find references for the word under your cursor.
-          map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-
-          -- Jump to the implementation of the word under your cursor.
-          map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-
-          -- Jump to the type of the word under your cursor.
-          map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-
-          -- Fuzzy find all the symbols in your current document.
-          --  Symbols are things like variables, functions, types, etc.
-          map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-
-          -- Fuzzy find all the symbols in your current workspace.
-          --  Similar to document symbols, except searches over your entire project.
-          -- map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-
-          -- Rename the variable under your cursor.
-          --  Most Language Servers support renaming across files, etc.
-          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-
-          -- Execute a code action, usually your cursor needs to be on top of an error
-          -- or a suggestion from your LSP for this to activate.
-          map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
-
-          -- WARN: This is not Goto Definition, this is Goto Declaration.
-          --  For example, in C this would take you to the header.
-          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+          map('gO', require('telescope.builtin').lsp_document_symbols, '[O]pen Symbols')
+          map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace Symbols')
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
