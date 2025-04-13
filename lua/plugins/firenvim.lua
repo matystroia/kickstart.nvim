@@ -25,6 +25,7 @@ local function setup()
   vim.opt.laststatus = 0
   vim.opt.signcolumn = 'no'
   vim.opt.fillchars = { eob = ' ' }
+
   -- TODO: This seems to not be wide enough for italics...
   vim.opt.guifont = 'Monaspace_Argon:h10'
 

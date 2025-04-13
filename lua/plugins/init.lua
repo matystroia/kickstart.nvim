@@ -34,5 +34,10 @@ require('lazy').setup {
     spec,
     firenvim.spec,
   },
-  defaults = { cond = firenvim.plugin_cond },
+  defaults = {
+    cond = firenvim.plugin_cond,
+  },
+  change_detection = {
+    notify = false,
+  },
 }
