@@ -288,6 +288,7 @@ return {
     ft = 'lua',
     opts = {
       library = {
+        { path = 'lazy.nvim', words = { 'LazyPluginSpec' } },
         -- Load luvit types when the `vim.uv` word is found
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
         { path = '$HOME/git/wezterm-types', mods = { 'wezterm' } },

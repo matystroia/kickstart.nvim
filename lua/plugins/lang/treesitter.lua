@@ -9,13 +9,7 @@ return {
     opts = {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'hyprlang', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
       auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
+      highlight = { enable = true },
       indent = { enable = true, disable = { 'ruby' } },
     },
     init = function()
@@ -30,7 +24,7 @@ return {
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
-  { -- Autoformat
+  {
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
@@ -79,5 +73,8 @@ return {
       { 'eraserhd/parinfer-rust', build = 'cargo build --release' },
     },
   },
-  { 'tridactyl/vim-tridactyl', ft = 'tridactyl' },
+  {
+    'tridactyl/vim-tridactyl',
+    ft = 'tridactyl',
+  },
 }
