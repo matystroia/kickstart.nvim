@@ -31,15 +31,82 @@ return {
     dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
   {
-    'echasnovski/mini.nvim',
-    config = function()
-      local statusline = require 'mini.statusline'
-      statusline.setup { use_icons = true }
+    'nvim-lualine/lualine.nvim',
+    opts = {
+      options = {
+        theme = 'tokyonight',
+        section_separators = '',
+        component_separators = '',
+      },
+      sections = {
+        lualine_a = {
+          {
+            function()
+              local get_mode = require('lualine.utils.mode').get_mode
+              return vim.g.active_hydra and vim.g.active_hydra:upper() or get_mode()
+            end,
+            color = function()
+              return vim.g.active_hydra and 'Foo' or nil
+            end,
+          },
+        },
+        lualine_b = {
+          { 'branch', icons_enabled = false },
+          { 'diff', symbols = { added = '+', modified = '~', removed = '-' } },
+        },
+        lualine_c = {
+          'filename',
+          {
+            function()
+              if vim.v.hlsearch == 0 then
+                return ''
+              end
 
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
-    end,
+              local ok, result = pcall(vim.fn.searchcount)
+              if not ok or next(result) == nil then
+                return ''
+              end
+
+              local denominator = math.min(result.total, result.maxcount)
+              return string.format('%d/%d', result.current, denominator)
+            end,
+            color = 'IncSearch',
+          },
+        },
+        lualine_x = {
+          {
+            function()
+              local time = require('wakatime').today()
+              if time == nil then
+                return '-'
+              end
+
+              local ret = {}
+              if time.hours then
+                table.insert(ret, string.format('%sh', time.hours))
+              end
+              if time.minutes then
+                table.insert(ret, string.format('%sm', time.minutes))
+              end
+
+              return table.concat(ret, ' ')
+            end,
+          },
+          'diagnostics',
+        },
+        lualine_y = { 'filetype' },
+        lualine_z = { 'location' },
+      },
+      inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = { 'filename' },
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = {},
+      },
+      extensions = { 'oil', 'fugitive' },
+    },
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
 }
