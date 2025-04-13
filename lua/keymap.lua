@@ -70,3 +70,10 @@ vim.keymap.set({ 'i', 'c' }, '<A-l>', '<Right>')
 vim.keymap.set({ 'n', 'v' }, '<Leader>/', function()
   return vim.api.nvim_get_mode().mode == 'n' and 'gcc' or 'gc'
 end, { expr = true, remap = true, desc = 'Toggle comment' })
+
+vim.api.nvim_create_autocmd('CmdwinEnter', {
+  callback = function()
+    vim.keymap.set('n', '<C-CR>', '<CR>q:', { buffer = true })
+  end,
+  group = vim.api.nvim_create_augroup('cmdwin-keep-open', { clear = true }),
+})
