@@ -1,24 +1,36 @@
 --- @type LazyPluginSpec[]
 return {
   {
-    'anuvyklack/hydra.nvim',
+    'nvimtools/hydra.nvim',
     config = function()
-      -- TODO: window, git
-      local hydra = require 'hydra'
-      hydra {
-        name = 'Window',
+      -- TODO: git?
+      local Hydra = require 'hydra'
+      local cmd = require('hydra.keymap-util').cmd
+
+      Hydra {
         config = {
+          color = 'pink',
+          hint = false,
           invoke_on_body = true,
-          hint = { boder = 'rounded' },
+          on_enter = function()
+            vim.g.active_hydra = 'window'
+          end,
+          on_exit = function()
+            vim.g.active_hydra = nil
+          end,
         },
         mode = 'n',
-        body = '<Leader>o',
+        body = '<C-w><C-w>',
         heads = {
-          { 'h', '<Cmd>resize -5<CR>' },
-          { 'j', '<Cmd>vertical resize +5<CR>' },
-          { 'k', '<Cmd>vertical resize -5<CR>' },
-          { 'l', '<Cmd>resize +5<CR>' },
-          { '<Esc>', nil, { exit = true, desc = false } },
+          { 'h', cmd 'vertical resize -5' },
+          { 'j', cmd 'resize +5' },
+          { 'k', cmd 'resize -5' },
+          { 'l', cmd 'vertical resize +5' },
+          { '<A-h>', '<C-w>H' },
+          { '<A-j>', '<C-w>J' },
+          { '<A-k>', '<C-w>K' },
+          { '<A-l>', '<C-w>L' },
+          { '<Esc>', nil, { exit = true } },
         },
       }
     end,

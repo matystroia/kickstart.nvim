@@ -24,30 +24,12 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>')
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>')
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>')
 
--- Move window
-vim.keymap.set('n', '<C-w>h', '<C-w>H')
-vim.keymap.set('n', '<C-w>l', '<C-w>L')
-vim.keymap.set('n', '<C-w>j', '<C-w>J')
-vim.keymap.set('n', '<C-w>k', '<C-w>K')
-
--- Resize window
--- TODO: Hydra
--- vim.keymap.set('n', '<C-w>H', '<Cmd>vertical resize -5<CR>')
--- vim.keymap.set('n', '<C-w>L', '<Cmd>vertical resize +5<CR>')
--- vim.keymap.set('n', '<C-w>J', '<Cmd>resize +5<CR>')
--- vim.keymap.set('n', '<C-w>K', '<Cmd>resize -5<CR>')
-
 local function cmd_hist(cmd)
   return function()
     vim.cmd(cmd)
     vim.fn.histadd('cmd', cmd)
   end
 end
-
-vim.keymap.set('n', '<C-w>H', cmd_hist 'resize -5')
-vim.keymap.set('n', '<C-w>L', cmd_hist 'resize +5')
-vim.keymap.set('n', '<C-w>J', cmd_hist 'resize +5')
-vim.keymap.set('n', '<C-w>K', cmd_hist 'resize -5')
 
 -- Indent with <Alt-h> and <Alt-l>
 vim.keymap.set('n', '<A-h>', '<<')
@@ -66,6 +48,8 @@ vim.keymap.set('n', 'g;', '@:', { desc = 'Repeat Ex' })
 -- Move in insert and command mode
 vim.keymap.set({ 'i', 'c' }, '<A-h>', '<Left>')
 vim.keymap.set({ 'i', 'c' }, '<A-l>', '<Right>')
+vim.keymap.set({ 'i', 'c' }, '<Left>', '<Nop>')
+vim.keymap.set({ 'i', 'c' }, '<Right>', '<Nop>')
 
 vim.keymap.set({ 'n', 'v' }, '<Leader>/', function()
   return vim.api.nvim_get_mode().mode == 'n' and 'gcc' or 'gc'
