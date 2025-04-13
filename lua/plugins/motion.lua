@@ -106,6 +106,8 @@ return {
     opts = { n_lines = 500 },
   },
   {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
     opts = {},
   },
 }
