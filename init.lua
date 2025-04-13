@@ -3,7 +3,7 @@ vim.g.maplocalleader = ' '
 
 vim.o.number = true
 vim.o.relativenumber = true
-vim.o.numberwidth = 2
+vim.o.numberwidth = 3
 
 vim.opt.mouse = ''
 vim.opt.showmode = false
@@ -36,11 +36,31 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.wrap = false
 
+vim.opt.shortmess:append 'S'
 vim.opt.cursorline = false
 vim.opt.scrolloff = 5
 
 vim.opt.confirm = false
 vim.opt.termguicolors = true
+
+-- Set autochdir when started with file as argument
+vim.api.nvim_create_autocmd('VimEnter', {
+  desc = 'Auto autochdir',
+  group = vim.api.nvim_create_augroup('auto-autochdir', { clear = true }),
+  callback = function()
+    if vim.g.started_by_firenvim then
+      return
+    end
+    if #vim.v.argv ~= 3 then
+      return
+    end
+
+    local stat = vim.uv.fs_stat(vim.v.argv[3])
+    if stat and stat.type == 'file' then
+      vim.opt.autochdir = true
+    end
+  end,
+})
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -56,5 +76,3 @@ require('terms').setup { 'wezterm', 'alacritty' }
 
 require 'keymap'
 require 'plugins'
-
--- vim: ts=2 sts=2 sw=2 et
