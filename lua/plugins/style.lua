@@ -1,12 +1,12 @@
---- @type LazyPluginSpec[]
+--- @type (LazyPluginSpec | string)[]
 return {
   {
-    'sainnhe/gruvbox-material',
+    'folke/tokyonight.nvim',
+    lazy = false,
     priority = 1000,
     config = function()
-      vim.g.gruvbox_material_enable_italic = true
-      vim.g.gruvbox_material_background = 'light'
-      vim.cmd.colorscheme 'gruvbox-material'
+      require('tokyonight').setup()
+      vim.cmd.colorscheme 'tokyonight'
     end,
   },
   {
@@ -25,6 +25,8 @@ return {
           show_close_icon = false,
         },
       }
+
+      vim.keymap.set('n', 'gb', '<Cmd>BufferLinePick<CR>')
     end,
     dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
