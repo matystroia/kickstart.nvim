@@ -16,12 +16,16 @@ return {
       { 'github/copilot.vim' },
       { 'nvim-lua/plenary.nvim', branch = 'master' },
     },
+    opts = {},
+    keys = {
+      {
+        '<leader>cc',
+        function()
+          require('CopilotChat').open()
+        end,
+        desc = 'Open Copilot Chat',
+      },
+    },
     build = 'make tiktoken',
-    config = function()
-      require('CopilotChat').setup()
-      vim.keymap.set('n', '<leader>cc', function()
-        require('CopilotChat').open()
-      end, { desc = 'Open Copilot Chat' })
-    end,
   },
 }
