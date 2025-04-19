@@ -1,21 +1,18 @@
 vim.keymap.set('n', '<Leader>q', '<Cmd>q<CR>')
 vim.keymap.set('n', '<Leader>w', '<Cmd>silent w<CR>')
 
+-- Buffers
+vim.keymap.set('n', '<Tab>n', '<Cmd>bn<CR>')
+vim.keymap.set('n', '<Tab>p', '<Cmd>bp<CR>')
+vim.keymap.set('n', '<Tab>d', '<Cmd>bd<CR>')
+
+-- Splits
+vim.keymap.set('n', '\\', '<Cmd>vsplit<CR>')
+vim.keymap.set('n', '|', '<Cmd>split<CR>')
+
 vim.keymap.set('n', '<Leader>a', 'ggVG')
 vim.keymap.set('n', '<Leader>z', '<Cmd>set wrap!<CR>')
 
-vim.keymap.set('n', '<Leader>bo', function()
-  local this_buf = vim.api.nvim_get_current_buf()
-  for buf in
-    vim.iter(vim.api.nvim_list_bufs()):filter(function(buf)
-      return vim.api.nvim_buf_is_loaded(buf) and buf ~= this_buf
-    end)
-  do
-    vim.cmd.bdelete { buf, bang = true }
-  end
-end)
-
-vim.keymap.set('i', '<A-BS>', '<C-w>', { remap = true })
 vim.keymap.set('n', '<C-n>', '<Cmd>nohls<CR>')
 
 -- Move between windows
@@ -24,12 +21,10 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>')
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>')
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>')
 
-local function cmd_hist(cmd)
-  return function()
-    vim.cmd(cmd)
-    vim.fn.histadd('cmd', cmd)
-  end
-end
+vim.keymap.set('n', '<C-w>h', '<C-w>H')
+vim.keymap.set('n', '<C-w>l', '<C-w>L')
+vim.keymap.set('n', '<C-w>j', '<C-w>J')
+vim.keymap.set('n', '<C-w>k', '<C-w>K')
 
 -- Indent with <Alt-h> and <Alt-l>
 vim.keymap.set('n', '<A-h>', '<<')

@@ -1,19 +1,19 @@
 local whitelist = vim
   .iter({
-    'sainnhe/gruvbox-material',
-
-    -- TODO: Only submodules
-    -- 'echasnovski/mini.nvim',
-    -- 'nvim-treesitter/nvim-treesitter',
-
-    -- 'plugins.motion',
+    'folke/tokyonight.nvim',
+    'plugins.basic.motion',
+    'plugins.basic.operator',
   })
   :fold({}, function(acc, v)
     if v:match '[%a%-%.]/[%a%-%.]' then
       acc[v] = true
     else
       for vv in vim.iter(require(v)) do
-        acc[vv[1]] = true
+        if type(vv) == 'string' then
+          acc[vv] = true
+        else
+          acc[vv[1]] = true
+        end
       end
     end
     return acc

@@ -9,12 +9,9 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugin_modules = {
-  'plugins.motion',
-  'plugins.keymap',
-  'plugins.telescope',
+  'plugins.basic',
+  'plugins.extra',
   'plugins.lang',
-  'plugins.style',
-  'plugins.misc',
 }
 
 local firenvim = require 'plugins.firenvim'

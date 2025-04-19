@@ -60,6 +60,8 @@ return {
             })
           end
 
+          vim.keymap.set('n', '<Leader>d', vim.diagnostic.open_float, { buffer = event.buf, desc = 'LSP: Open [D]iagnostic' })
+
           -- The following code creates a keymap to toggle inlay hints in your
           -- code, if the language server you are using supports them
           --
@@ -85,18 +87,17 @@ return {
             [vim.diagnostic.severity.INFO] = '󰋽 ',
             [vim.diagnostic.severity.HINT] = '󰌶 ',
           },
-        } or {},
+        },
         virtual_text = {
           source = 'if_many',
           spacing = 2,
           format = function(diagnostic)
-            local diagnostic_message = {
+            return ({
               [vim.diagnostic.severity.ERROR] = diagnostic.message,
               [vim.diagnostic.severity.WARN] = diagnostic.message,
               [vim.diagnostic.severity.INFO] = diagnostic.message,
               [vim.diagnostic.severity.HINT] = diagnostic.message,
-            }
-            return diagnostic_message[diagnostic.severity]
+            })[diagnostic.severity]
           end,
         },
       }
@@ -116,6 +117,7 @@ return {
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+      --- @type { [string]: vim.lsp.ClientConfig }
       local servers = {
         -- clangd = {},
         -- gopls = {},
@@ -139,10 +141,12 @@ return {
               completion = {
                 callSnippet = 'Replace',
               },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
               diagnostics = { disable = { 'missing-fields' } },
             },
           },
+        },
+        basedpyright = {
+          settings = {},
         },
       }
 
@@ -219,7 +223,7 @@ return {
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        preset = 'enter',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -270,5 +274,10 @@ return {
         { path = '$HOME/git/wezterm-types', mods = { 'wezterm' } },
       },
     },
+  },
+  {
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    opts = {},
   },
 }

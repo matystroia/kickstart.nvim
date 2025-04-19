@@ -35,7 +35,8 @@ return {
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>so', builtin.oldfiles, { desc = '[S]earch [O]ld' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+
+      vim.keymap.set('n', '<Tab><Tab>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       -- TODO: Query starts with ~ or / -> search in $HOME
       -- and other VSCode-like prefixes

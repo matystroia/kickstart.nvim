@@ -34,9 +34,11 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
-vim.opt.wrap = false
 
+vim.opt.formatoptions:remove 'r'
 vim.opt.shortmess:append 'S'
+
+vim.opt.wrap = false
 vim.opt.cursorline = false
 vim.opt.scrolloff = 5
 

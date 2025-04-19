@@ -26,7 +26,9 @@ return {
         },
       }
 
-      vim.keymap.set('n', 'gb', '<Cmd>BufferLinePick<CR>')
+      vim.keymap.set('n', '<Tab>g', '<Cmd>BufferLinePick<CR>')
+      vim.keymap.set('n', '<Tab>D', '<Cmd>BufferLinePickClose<CR>')
+      vim.keymap.set('n', '<Tab>o', '<Cmd>BufferLineCloseOthers<CR>')
     end,
     dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
