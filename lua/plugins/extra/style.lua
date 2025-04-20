@@ -111,4 +111,13 @@ return {
     },
     dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    opts = {
+      indent = { char = '▏' },
+      scope = { enabled = false },
+    },
+    enabled = false,
+  },
 }
