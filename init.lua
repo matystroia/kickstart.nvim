@@ -107,6 +107,8 @@ end, { nargs = '?', range = true, desc = 'Create scratch buffer' })
 
 -- Terminal padding and background color
 require('terms').setup { 'wezterm' }
+-- Polling WakaTime CLI
+require('wakatime').setup()
 
 require 'keymap'
 require 'plugins'
