@@ -64,6 +64,8 @@ vim.api.nvim_create_autocmd('VimEnter', {
   end,
 })
 
+-- TODO: Move these to commands.lua
+
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
@@ -72,6 +74,36 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+
+vim.api.nvim_create_user_command('Scratch', function(opts)
+  local filetype = opts.fargs[1] or vim.bo.filetype
+
+  local buf = vim.api.nvim_create_buf(true, true)
+  vim.api.nvim_buf_set_name(buf, filetype ~= '' and 'scratch.' .. filetype or 'scratch')
+
+  local bufopts = { filetype = filetype }
+  for key, value in pairs(bufopts) do
+    vim.api.nvim_set_option_value(key, value, { buf = buf })
+  end
+
+  -- Copy lines in range to new buffer
+  if opts.range ~= 0 then
+    local lines = vim.api.nvim_buf_get_lines(0, opts.line1, opts.line2, false)
+    vim.api.nvim_buf_set_lines(buf, 0, 0, false, lines)
+  end
+
+  -- Attach current LSP client if creating same filetype
+  if opts.fargs[1] == nil then
+    local clients = vim.lsp.get_clients { bufnr = vim.api.nvim_get_current_buf() }
+    for _, client in ipairs(clients) do
+      if client.name ~= 'GitHub Copilot' then
+        vim.lsp.buf_attach_client(buf, client.id)
+      end
+    end
+  end
+
+  vim.api.nvim_set_current_buf(buf)
+end, { nargs = '?', range = true, desc = 'Create scratch buffer' })
 
 -- Terminal padding and background color
 require('terms').setup { 'wezterm' }
