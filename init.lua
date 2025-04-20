@@ -74,7 +74,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Terminal padding and background color
-require('terms').setup { 'wezterm', 'alacritty' }
+require('terms').setup { 'wezterm' }
 
 require 'keymap'
 require 'plugins'
