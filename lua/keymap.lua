@@ -4,7 +4,7 @@ vim.keymap.set('n', '<Leader>w', '<Cmd>silent w<CR>')
 -- Buffers
 vim.keymap.set('n', '<Tab>n', '<Cmd>bn<CR>')
 vim.keymap.set('n', '<Tab>p', '<Cmd>bp<CR>')
-vim.keymap.set('n', '<Tab>d', '<Cmd>bd<CR>')
+vim.keymap.set('n', '<Tab>d', '<Cmd>b#|bd#<CR>')
 
 -- Splits
 vim.keymap.set('n', '\\', '<Cmd>vsplit<CR>')
