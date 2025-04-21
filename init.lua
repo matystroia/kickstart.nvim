@@ -106,9 +106,9 @@ vim.api.nvim_create_user_command('Scratch', function(opts)
 end, { nargs = '?', range = true, desc = 'Create scratch buffer' })
 
 -- Terminal padding and background color
-require('terms').setup { 'wezterm' }
+require('custom.terms').setup { 'wezterm' }
 -- Polling WakaTime CLI
-require('wakatime').setup()
+require('custom.wakatime').setup()
 
 require 'keymap'
 require 'plugins'

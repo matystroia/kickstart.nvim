@@ -78,7 +78,7 @@ return {
         lualine_x = {
           {
             function()
-              local time = require('wakatime').today()
+              local time = require('custom.wakatime').today()
               if time == nil then
                 return '-'
               end
