@@ -35,7 +35,7 @@ vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
-vim.opt.formatoptions:remove 'r'
+vim.opt.formatoptions:remove { 'r', 'o' }
 vim.opt.shortmess:append 'S'
 
 vim.opt.wrap = false
