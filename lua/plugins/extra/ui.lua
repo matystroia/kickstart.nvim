@@ -1,15 +1,6 @@
 --- @type (LazyPluginSpec | string)[]
 return {
   {
-    'folke/tokyonight.nvim',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      require('tokyonight').setup()
-      vim.cmd.colorscheme 'tokyonight'
-    end,
-  },
-  {
     'folke/todo-comments.nvim',
     event = 'VimEnter',
     dependencies = { 'nvim-lua/plenary.nvim' },
@@ -36,7 +27,7 @@ return {
     'nvim-lualine/lualine.nvim',
     opts = {
       options = {
-        theme = 'tokyonight',
+        theme = 'auto',
         section_separators = '',
         component_separators = '',
       },
@@ -50,6 +41,9 @@ return {
             color = function()
               return vim.g.active_hydra and 'Foo' or nil
             end,
+            fmt = function(mode)
+              return mode:sub(1, 1)
+            end,
           },
         },
         lualine_b = {
@@ -57,23 +51,8 @@ return {
           { 'diff', symbols = { added = '+', modified = '~', removed = '-' } },
         },
         lualine_c = {
-          'filename',
-          {
-            function()
-              if vim.v.hlsearch == 0 then
-                return ''
-              end
-
-              local ok, result = pcall(vim.fn.searchcount)
-              if not ok or next(result) == nil then
-                return ''
-              end
-
-              local denominator = math.min(result.total, result.maxcount)
-              return string.format('%d/%d', result.current, denominator)
-            end,
-            color = 'IncSearch',
-          },
+          { 'filename' },
+          { "require('custom.contextline').context()" },
         },
         lualine_x = {
           {
@@ -96,7 +75,25 @@ return {
           },
           'diagnostics',
         },
-        lualine_y = { 'filetype' },
+        lualine_y = {
+          {
+            function()
+              if vim.v.hlsearch == 0 then
+                return ''
+              end
+
+              local ok, result = pcall(vim.fn.searchcount)
+              if not ok or next(result) == nil then
+                return ''
+              end
+
+              local denominator = math.min(result.total, result.maxcount)
+              return string.format('%d/%d', result.current, denominator)
+            end,
+            color = 'IncSearch',
+          },
+          'filetype',
+        },
         lualine_z = { 'location' },
       },
       inactive_sections = {
@@ -118,6 +115,27 @@ return {
       indent = { char = '▏' },
       scope = { enabled = false },
     },
-    enabled = false,
+    enabled = true,
+  },
+  {
+    'j-hui/fidget.nvim',
+    config = function()
+      local fidget = require 'fidget'
+      local default_notification = vim.tbl_extend('force', fidget.notification.default_config, {
+        icon = '',
+        error_annote = '󰅚 ',
+        warn_annote = '󰀪 ',
+        info_annote = '󰋽 ',
+        debug_annote = '󰌶 ',
+      })
+
+      fidget.setup {
+        notification = {
+          override_vim_notify = true,
+          window = { border = 'rounded' },
+          configs = { default = default_notification },
+        },
+      }
+    end,
   },
 }

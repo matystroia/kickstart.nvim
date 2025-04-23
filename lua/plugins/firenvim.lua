@@ -1,8 +1,8 @@
 local whitelist = vim
   .iter({
-    'folke/tokyonight.nvim',
     'plugins.basic.motion',
     'plugins.basic.operator',
+    'plugins.extra.colorscheme',
   })
   :fold({}, function(acc, v)
     if v:match '[%a%-%.]/[%a%-%.]' then
