@@ -8,13 +8,13 @@ local whitelist = vim
     if v:match '[%a%-%.]/[%a%-%.]' then
       acc[v] = true
     else
-      for vv in vim.iter(require(v)) do
+      vim.iter(require(v)):each(function(vv)
         if type(vv) == 'string' then
           acc[vv] = true
         else
           acc[vv[1]] = true
         end
-      end
+      end)
     end
     return acc
   end)
