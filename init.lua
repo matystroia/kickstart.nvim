@@ -45,25 +45,6 @@ vim.opt.scrolloff = 5
 vim.opt.confirm = false
 vim.opt.termguicolors = true
 
--- Set autochdir when started with file as argument
-vim.api.nvim_create_autocmd('VimEnter', {
-  desc = 'Auto autochdir',
-  group = vim.api.nvim_create_augroup('auto-autochdir', { clear = true }),
-  callback = function()
-    if vim.g.started_by_firenvim then
-      return
-    end
-    if #vim.v.argv ~= 3 then
-      return
-    end
-
-    local stat = vim.uv.fs_stat(vim.v.argv[3])
-    if stat and stat.type == 'file' then
-      vim.opt.autochdir = true
-    end
-  end,
-})
-
 -- TODO: Move these to commands.lua
 
 -- Highlight when yanking (copying) text
@@ -75,32 +56,46 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- DIE :)
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('local-fo', { clear = true }),
+  callback = function()
+    vim.opt_local.formatoptions:remove { 'r', 'o' }
+  end,
+})
+
+-- Start terminal in insert mode
+vim.api.nvim_create_autocmd('TermOpen', {
+  group = vim.api.nvim_create_augroup('term-startinsert', { clear = true }),
+  command = 'startinsert',
+})
+
 vim.api.nvim_create_user_command('Scratch', function(opts)
-  local filetype = opts.fargs[1] or vim.bo.filetype
+  local filetype = opts.fargs[1] or vim.bo.filetype or 'txt'
 
   local buf = vim.api.nvim_create_buf(true, true)
-  vim.api.nvim_buf_set_name(buf, filetype ~= '' and 'scratch.' .. filetype or 'scratch')
+  vim.bo[buf].filetype = filetype
 
-  local bufopts = { filetype = filetype }
-  for key, value in pairs(bufopts) do
-    vim.api.nvim_set_option_value(key, value, { buf = buf })
-  end
+  -- Same directory so LSP doesn't spaz out
+  local name = string.format('scratch-%03d.%s', math.random(0, 999), filetype)
+  local path = vim.api.nvim_buf_get_name(0)
+  vim.api.nvim_buf_set_name(buf, vim.fs.joinpath(path, name))
 
   -- Copy lines in range to new buffer
   if opts.range ~= 0 then
-    local lines = vim.api.nvim_buf_get_lines(0, opts.line1, opts.line2, false)
-    vim.api.nvim_buf_set_lines(buf, 0, 0, false, lines)
+    local lines = vim.api.nvim_buf_get_lines(0, opts.line1 - 1, opts.line2, true)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, true, lines)
   end
 
-  -- Attach current LSP client if creating same filetype
-  if opts.fargs[1] == nil then
-    local clients = vim.lsp.get_clients { bufnr = vim.api.nvim_get_current_buf() }
-    for _, client in ipairs(clients) do
-      if client.name ~= 'GitHub Copilot' then
-        vim.lsp.buf_attach_client(buf, client.id)
-      end
-    end
+  -- Attach current LSP client if same filetype
+  if opts.fargs[1] == nil or opts.fargs[1] == filetype then
+    vim.iter(vim.lsp.get_clients { bufnr = vim.api.nvim_get_current_buf() }):each(function(client)
+      vim.lsp.buf_attach_client(buf, client.id)
+    end)
   end
+
+  -- Replace save with format :)
+  vim.keymap.set('n', '<Leader>w', '<Leader>f', { remap = true, buffer = buf })
 
   vim.api.nvim_set_current_buf(buf)
 end, { nargs = '?', range = true, desc = 'Create scratch buffer' })
