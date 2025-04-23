@@ -1,10 +1,44 @@
 vim.keymap.set('n', '<Leader>q', '<Cmd>q<CR>')
+vim.keymap.set('n', '<Leader>Q', '<Cmd>q!<CR>')
 vim.keymap.set('n', '<Leader>w', '<Cmd>silent w<CR>')
 
 -- Buffers
 vim.keymap.set('n', '<Tab>n', '<Cmd>bn<CR>')
 vim.keymap.set('n', '<Tab>p', '<Cmd>bp<CR>')
-vim.keymap.set('n', '<Tab>d', '<Cmd>bp|sp|bn|bd<CR>')
+vim.keymap.set('n', '<Tab>d', function()
+  local buf = vim.api.nvim_win_get_buf(0)
+
+  local alt_bufs = vim.iter(vim.api.nvim_list_bufs()):filter(function(b)
+    return b ~= buf and vim.api.nvim_buf_is_loaded(b) and vim.bo[b].buflisted
+  end)
+
+  local alt_buf = alt_bufs:next()
+  if alt_buf ~= nil then
+    local closest_buf = alt_bufs:fold({ math.abs(alt_buf - buf), alt_buf }, function(acc, b)
+      local dif = math.abs(b - buf)
+      return dif < acc[1] and { dif, b } or acc
+    end)[2]
+    vim.api.nvim_win_set_buf(0, closest_buf)
+  else
+    vim.api.nvim_win_set_buf(0, vim.api.nvim_create_buf(true, true))
+  end
+
+  vim.api.nvim_buf_delete(buf, { force = true })
+end)
+vim.keymap.set('n', '<Tab>q', function()
+  vim.iter(vim.api.nvim_list_bufs()):each(function(buf)
+    vim.api.nvim_buf_delete(buf, { force = true })
+  end)
+end)
+
+-- Terminal
+vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { noremap = true })
+vim.keymap.set('n', '<Leader>ts', function()
+  vim.cmd.vnew()
+  vim.cmd.term()
+  vim.cmd.wincmd 'J'
+  vim.api.nvim_win_set_height(0, 10)
+end)
 
 -- Splits
 vim.keymap.set('n', '\\', '<Cmd>vsplit<CR>')
@@ -12,6 +46,7 @@ vim.keymap.set('n', '|', '<Cmd>split<CR>')
 
 vim.keymap.set('n', '<Leader>a', 'ggVG')
 vim.keymap.set('n', '<Leader>z', '<Cmd>set wrap!<CR>')
+vim.keymap.set('v', '<Leader>x', ':lua<CR>')
 
 vim.keymap.set('n', '<C-n>', '<Cmd>nohls<CR>')
 
@@ -46,13 +81,23 @@ vim.keymap.set({ 'i', 'c' }, '<A-l>', '<Right>')
 vim.keymap.set({ 'i', 'c' }, '<Left>', '<Nop>')
 vim.keymap.set({ 'i', 'c' }, '<Right>', '<Nop>')
 
+-- Completion
+vim.keymap.set('i', '<C-f>', '<C-X><C-F>')
+vim.keymap.set('i', '<C-l>', '<C-X><C-F>')
+
+-- Misc
 vim.keymap.set({ 'n', 'v' }, '<Leader>/', function()
   return vim.api.nvim_get_mode().mode == 'n' and 'gcc' or 'gc'
-end, { expr = true, remap = true, desc = 'Toggle comment' })
+end, {
+  expr = true,
+  remap = true,
+  desc = 'Toggle comment',
+})
 
 vim.api.nvim_create_autocmd('CmdwinEnter', {
+  group = vim.api.nvim_create_augroup('cmdwin-keep-open', { clear = true }),
   callback = function()
     vim.keymap.set('n', '<C-CR>', '<CR>q:', { buffer = true })
   end,
-  group = vim.api.nvim_create_augroup('cmdwin-keep-open', { clear = true }),
+  desc = 'Execute command and reopen command window',
 })
