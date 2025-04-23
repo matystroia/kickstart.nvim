@@ -2,6 +2,9 @@
 return {
   {
     'nvimtools/hydra.nvim',
+    keys = {
+      { '<C-w><C-r>', mode = 'n' },
+    },
     config = function()
       -- TODO: git?
       local Hydra = require 'hydra'
@@ -20,7 +23,7 @@ return {
           end,
         },
         mode = 'n',
-        body = '<C-w><C-w>',
+        body = '<C-w><C-r>',
         heads = {
           { 'h', cmd 'vertical resize -5' },
           { 'j', cmd 'resize +5' },
