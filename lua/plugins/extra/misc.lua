@@ -18,9 +18,7 @@ return {
   },
   {
     'stevearc/oil.nvim',
-    setup = function()
-      ---@module 'oil'
-      ---@type oil.SetupOpts
+    config = function()
       require('oil').setup {
         use_default_keymaps = false,
         keymaps = {
@@ -39,6 +37,10 @@ return {
           ['gs'] = { 'actions.change_sort', mode = 'n' },
           ['g.'] = { 'actions.toggle_hidden', mode = 'n' },
           ['g\\'] = { 'actions.toggle_trash', mode = 'n' },
+        },
+        float = {
+          max_width = 0.6,
+          max_height = 0.6,
         },
       }
 
