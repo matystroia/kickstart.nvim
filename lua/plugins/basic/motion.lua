@@ -5,6 +5,7 @@ return {
     config = function()
       local eyeliner = require 'eyeliner'
       eyeliner.setup {
+        default_keymaps = false,
         highlight_on_key = true,
         dim = true,
       }
@@ -14,17 +15,9 @@ return {
     'ggandor/leap.nvim',
     config = function()
       local leap = require 'leap'
-      leap.opts.case_sensitive = true
+      leap.opts.case_sensitive = false
       vim.keymap.set('n', 's', '<Plug>(leap-forward)')
       vim.keymap.set('n', 'S', '<Plug>(leap-backward)')
     end,
-  },
-  {
-    'rhysd/clever-f.vim',
-    init = function()
-      vim.g.clever_f_across_no_line = 1
-      vim.g.clever_f_not_overwrites_standard_mappings = 1
-    end,
-    enabled = false,
   },
 }
