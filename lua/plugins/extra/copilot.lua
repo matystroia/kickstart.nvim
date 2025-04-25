@@ -12,11 +12,24 @@ return {
         suggestion = {
           auto_trigger = false,
           keymap = {
-            accept = '<C-l>',
+            accept = false,
+            accept_word = false,
+            accept_line = false,
+            next = '<M-]>',
+            prev = '<M-[>',
+            dismiss = '<C-]>',
           },
         },
         copilot_model = 'gpt-4o-copilot',
       }
+
+      vim.keymap.set('i', '<M-l>', function()
+        if suggestion.is_visible() then
+          suggestion.accept()
+        else
+          return '<Right>'
+        end
+      end, { expr = true })
 
       vim.keymap.set('n', '<Leader>tc', function()
         if vim.b.copilot_suggestion_auto_trigger then
@@ -93,7 +106,7 @@ return {
   {
     'CopilotC-Nvim/CopilotChat.nvim',
     dependencies = {
-      { 'github/copilot.vim' },
+      { 'zbirenbaum/copilot.lua' },
       { 'nvim-lua/plenary.nvim', branch = 'master' },
     },
     opts = {},
