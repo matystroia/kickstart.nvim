@@ -14,6 +14,24 @@ return {
         options = {
           show_buffer_close_icons = false,
           show_close_icon = false,
+          custom_areas = {
+            right = function()
+              local time = require('custom.wakatime').today()
+              if time == nil then
+                return { { text = '? ' } }
+              end
+
+              local ret = {}
+              if time.hours then
+                ret[#ret + 1] = string.format('%sh', time.hours)
+              end
+              if time.minutes then
+                ret[#ret + 1] = string.format('%sm', time.hours)
+              end
+
+              return { { text = table.concat(ret, ' ') .. ' ' } }
+            end,
+          },
         },
       }
 
@@ -54,27 +72,7 @@ return {
           { 'filename' },
           { "require('custom.contextline').context()" },
         },
-        lualine_x = {
-          {
-            function()
-              local time = require('custom.wakatime').today()
-              if time == nil then
-                return '-'
-              end
-
-              local ret = {}
-              if time.hours then
-                table.insert(ret, string.format('%sh', time.hours))
-              end
-              if time.minutes then
-                table.insert(ret, string.format('%sm', time.minutes))
-              end
-
-              return table.concat(ret, ' ')
-            end,
-          },
-          'diagnostics',
-        },
+        lualine_x = { 'diagnostics' },
         lualine_y = {
           {
             function()
