@@ -59,12 +59,6 @@ return {
             })
           end
 
-          vim.keymap.set('n', '<Leader>d', vim.diagnostic.open_float, { buffer = event.buf, desc = 'LSP: Open [D]iagnostic' })
-
-          -- The following code creates a keymap to toggle inlay hints in your
-          -- code, if the language server you are using supports them
-          --
-          -- This may be unwanted, since they displace some of your code
           if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
@@ -82,9 +76,8 @@ return {
         return _open_floating_preview(contents, syntax, opts, ...)
       end
 
-      -- Diagnostic Config
-      -- See :help vim.diagnostic.Opts
-      vim.diagnostic.config {
+      -- Diagnostic
+      local diagnostic_cfg = {
         severity_sort = true,
         float = { border = 'rounded', source = 'if_many' },
         underline = { severity = vim.diagnostic.severity.ERROR },
@@ -104,12 +97,16 @@ return {
           end,
         },
       }
+      vim.diagnostic.config(diagnostic_cfg)
 
-      -- LSP servers and clients are able to communicate to each other what features they support.
-      --  By default, Neovim doesn't support everything that is in the LSP specification.
-      --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
-      --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
+      vim.keymap.set('n', 'gk', vim.diagnostic.open_float, { desc = 'LSP: Open Diagnostic' })
+      vim.keymap.set('n', 'gK', function()
+        if vim.diagnostic.config().virtual_lines then
+          vim.diagnostic.config(vim.tbl_extend('error', diagnostic_cfg, { virtual_lines = false }))
+        else
+          vim.diagnostic.config { virtual_text = false, virtual_lines = true }
+        end
+      end, { desc = 'LSP: Toggle Diagnostic Lines' })
 
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
