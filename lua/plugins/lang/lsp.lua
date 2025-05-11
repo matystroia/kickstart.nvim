@@ -8,9 +8,6 @@ return {
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
-      -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
-
       'saghen/blink.cmp',
     },
     config = function()
@@ -32,7 +29,9 @@ return {
           map('grt', require('telescope.builtin').lsp_type_definitions, '[T]ype')
 
           map('gO', require('telescope.builtin').lsp_document_symbols, '[O]pen Symbols')
-          map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace Symbols')
+          map('gW', function()
+            require('telescope.builtin').lsp_dynamic_workspace_symbols { path_display = { 'hidden' } }
+          end, '[W]orkspace Symbols')
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
@@ -101,12 +100,7 @@ return {
           source = 'if_many',
           spacing = 2,
           format = function(diagnostic)
-            return ({
-              [vim.diagnostic.severity.ERROR] = diagnostic.message,
-              [vim.diagnostic.severity.WARN] = diagnostic.message,
-              [vim.diagnostic.severity.INFO] = diagnostic.message,
-              [vim.diagnostic.severity.HINT] = diagnostic.message,
-            })[diagnostic.severity]
+            return diagnostic.message
           end,
         },
       }
