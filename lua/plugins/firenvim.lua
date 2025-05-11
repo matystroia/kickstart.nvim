@@ -53,6 +53,10 @@ return {
             selector = 'textarea',
             takeover = 'never',
           },
+          ['github.com'] = {
+            priority = 1,
+            takeover = 'always',
+          },
         },
       }
     end,
