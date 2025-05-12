@@ -46,41 +46,6 @@ vim.o.scrolloff = 5
 vim.o.confirm = false
 vim.o.termguicolors = true
 
--- TODO: Move these to commands.lua
-
--- Highlight when yanking (copying) text
-vim.api.nvim_create_autocmd('TextYankPost', {
-  desc = 'Highlight when yanking (copying) text',
-  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-  callback = function()
-    vim.hl.on_yank()
-  end,
-})
-
--- DIE :)
-vim.api.nvim_create_autocmd('FileType', {
-  group = vim.api.nvim_create_augroup('local-fo', { clear = true }),
-  callback = function()
-    vim.opt_local.formatoptions:remove { 'r', 'o' }
-  end,
-})
-
--- Start terminal in insert mode
-vim.api.nvim_create_autocmd('TermOpen', {
-  group = vim.api.nvim_create_augroup('term-startinsert', { clear = true }),
-  command = 'startinsert',
-})
-
--- Keep cmdwin open
-vim.api.nvim_create_autocmd('CmdwinEnter', {
-  group = vim.api.nvim_create_augroup('cmdwin-keep-open', { clear = true }),
-  callback = function()
-    vim.keymap.set('n', '<C-CR>', function()
-      vim.api.nvim_exec2(vim.api.nvim_get_current_line(), {})
-    end, { buffer = true })
-  end,
-})
-
 vim.api.nvim_create_user_command('Scratch', function(opts)
   local filetype = opts.fargs[1] or vim.bo.filetype or 'txt'
 
@@ -144,6 +109,7 @@ require('custom.wakatime').setup()
 -- Context line
 require('custom.contextline').setup()
 
+require 'autocmd'
 require 'keymap'
 require 'plugins'
 
