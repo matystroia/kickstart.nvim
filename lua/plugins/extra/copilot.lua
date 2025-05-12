@@ -109,10 +109,17 @@ return {
       { 'zbirenbaum/copilot.lua' },
       { 'nvim-lua/plenary.nvim', branch = 'master' },
     },
-    opts = {},
+    opts = {
+      mappings = {
+        submit_prompt = {
+          normal = '<CR>',
+          insert = '<C-CR>',
+        },
+      },
+    },
     keys = {
       {
-        '<leader>cc',
+        '<Leader>cc',
         function()
           require('CopilotChat').open()
         end,
