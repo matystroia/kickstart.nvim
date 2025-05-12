@@ -72,6 +72,9 @@ return {
       fuzzy = { implementation = 'rust' },
       signature = {
         enabled = true,
+        trigger = {
+          show_on_accept = true,
+        },
         window = {
           show_documentation = false,
         },
