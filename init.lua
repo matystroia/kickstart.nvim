@@ -107,3 +107,10 @@ require('custom.wakatime').setup()
 
 require 'keymap'
 require 'plugins'
+
+-- Workspace config
+local workspace_config = vim.fs.joinpath(vim.uv.cwd(), '.nvim.lua')
+local stat = vim.uv.fs_stat(workspace_config)
+if stat and stat.type == 'file' then
+  dofile(workspace_config)
+end
