@@ -15,6 +15,9 @@ vim.schedule(function()
 end)
 
 vim.opt.breakindent = true
+vim.opt.autoindent = true
+vim.opt.smartindent = true
+
 vim.opt.undofile = true
 
 vim.opt.ignorecase = true
@@ -22,9 +25,8 @@ vim.opt.smartcase = true
 
 vim.opt.signcolumn = 'yes'
 
-vim.opt.updatetime = 750
-vim.opt.timeoutlen = 300
-
+vim.opt.updatetime = 500
+vim.opt.timeoutlen = 500
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
@@ -35,7 +37,6 @@ vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
-vim.opt.formatoptions:remove { 'r', 'o' }
 vim.opt.shortmess:append 'S'
 
 vim.opt.wrap = false
@@ -68,6 +69,16 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.api.nvim_create_autocmd('TermOpen', {
   group = vim.api.nvim_create_augroup('term-startinsert', { clear = true }),
   command = 'startinsert',
+})
+
+vim.api.nvim_create_autocmd('CmdwinEnter', {
+  group = vim.api.nvim_create_augroup('cmdwin-keep-open', { clear = true }),
+  callback = function()
+    vim.keymap.set('n', '<C-CR>', function()
+      vim.api.nvim_exec2(vim.api.nvim_get_current_line(), {})
+    end, { buffer = true })
+  end,
+  desc = 'Execute cmd w/ cmdwin open',
 })
 
 vim.api.nvim_create_user_command('Scratch', function(opts)
