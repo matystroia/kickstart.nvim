@@ -71,6 +71,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
   command = 'startinsert',
 })
 
+-- Keep cmdwin open
 vim.api.nvim_create_autocmd('CmdwinEnter', {
   group = vim.api.nvim_create_augroup('cmdwin-keep-open', { clear = true }),
   callback = function()
@@ -78,7 +79,6 @@ vim.api.nvim_create_autocmd('CmdwinEnter', {
       vim.api.nvim_exec2(vim.api.nvim_get_current_line(), {})
     end, { buffer = true })
   end,
-  desc = 'Execute cmd w/ cmdwin open',
 })
 
 vim.api.nvim_create_user_command('Scratch', function(opts)
@@ -113,8 +113,12 @@ end, { nargs = '?', range = true, desc = 'Create scratch buffer' })
 
 -- Terminal padding and background color
 require('custom.terms').setup { 'wezterm' }
+
 -- Polling WakaTime CLI
 require('custom.wakatime').setup()
+
+-- Context line
+require('custom.contextline').setup()
 
 require 'keymap'
 require 'plugins'
