@@ -12,6 +12,8 @@ local plugin_modules = {
   'plugins.basic',
   'plugins.extra',
   'plugins.lang',
+  'plugins.lsp',
+  'plugins.ui',
 }
 
 local firenvim = require 'plugins.firenvim'

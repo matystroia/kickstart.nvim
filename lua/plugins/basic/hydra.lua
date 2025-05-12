@@ -3,13 +3,10 @@ return {
   {
     'nvimtools/hydra.nvim',
     keys = {
-      { '<C-w><C-r>', mode = 'n' },
+      { '<C-w>\\', mode = 'n' },
     },
     config = function()
-      -- TODO: git?
       local Hydra = require 'hydra'
-      local cmd = require('hydra.keymap-util').cmd
-
       Hydra {
         config = {
           color = 'pink',
@@ -23,12 +20,32 @@ return {
           end,
         },
         mode = 'n',
-        body = '<C-w><C-r>',
+        body = '<C-w>\\',
         heads = {
-          { 'h', cmd 'vertical resize -5' },
-          { 'j', cmd 'resize +5' },
-          { 'k', cmd 'resize -5' },
-          { 'l', cmd 'vertical resize +5' },
+          {
+            'h',
+            function()
+              require('custom.wince').resize('left', 5)
+            end,
+          },
+          {
+            'j',
+            function()
+              require('custom.wince').resize('down', 5)
+            end,
+          },
+          {
+            'k',
+            function()
+              require('custom.wince').resize('up', 5)
+            end,
+          },
+          {
+            'l',
+            function()
+              require('custom.wince').resize('right', 5)
+            end,
+          },
           { '<A-h>', '<C-w>H' },
           { '<A-j>', '<C-w>J' },
           { '<A-k>', '<C-w>K' },

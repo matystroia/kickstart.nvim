@@ -1,9 +1,6 @@
 --- @type (LazyPluginSpec | string)[]
 return {
-  {
-    'NMAC427/guess-indent.nvim',
-    opts = {},
-  },
+  { 'NMAC427/guess-indent.nvim', opts = {} },
   {
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
