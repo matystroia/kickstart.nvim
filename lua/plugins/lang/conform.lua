@@ -22,7 +22,7 @@ return {
         sh = { 'shfmt' },
       }
       local general_formatters = {
-        prettierd = { 'javascript', 'typescript', 'json', 'jsonc', 'html' },
+        prettierd = { 'javascript', 'typescript', 'json', 'jsonc', 'html', 'javascriptreact', 'typescriptreact' },
       }
 
       formatters_by_ft = vim.tbl_extend(
@@ -47,7 +47,7 @@ return {
       end)
 
       require('conform').setup {
-        notify_on_error = true,
+        notify_on_error = false,
         format_on_save = function(bufnr)
           if vim.b[bufnr].conform_disabled then
             return nil
