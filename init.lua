@@ -5,46 +5,46 @@ vim.o.number = true
 vim.o.relativenumber = true
 vim.o.numberwidth = 3
 
-vim.opt.mouse = ''
-vim.opt.showmode = false
+vim.o.mouse = ''
+vim.o.showmode = false
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
+  vim.o.clipboard = 'unnamedplus'
 end)
 
-vim.opt.breakindent = true
-vim.opt.autoindent = true
-vim.opt.smartindent = true
+vim.o.breakindent = true
+vim.o.autoindent = true
+vim.o.smartindent = true
 
-vim.opt.undofile = true
+vim.o.undofile = true
 
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
+vim.o.ignorecase = true
+vim.o.smartcase = true
 
-vim.opt.signcolumn = 'yes'
+vim.o.signcolumn = 'yes'
 
-vim.opt.updatetime = 500
-vim.opt.timeoutlen = 500
-vim.opt.splitright = true
-vim.opt.splitbelow = true
+vim.o.updatetime = 500
+vim.o.timeoutlen = 500
+vim.o.splitright = true
+vim.o.splitbelow = true
 
-vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.o.list = true
+vim.o.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
+vim.o.expandtab = true
 
 vim.opt.shortmess:append 'S'
 
-vim.opt.wrap = false
-vim.opt.cursorline = false
-vim.opt.scrolloff = 5
+vim.o.wrap = false
+vim.o.cursorline = false
+vim.o.scrolloff = 5
 
-vim.opt.confirm = false
-vim.opt.termguicolors = true
+vim.o.confirm = false
+vim.o.termguicolors = true
 
 -- TODO: Move these to commands.lua
 

@@ -20,14 +20,14 @@ local whitelist = vim
   end)
 
 local function setup()
-  vim.opt.number = false
-  vim.opt.relativenumber = false
-  vim.opt.laststatus = 0
-  vim.opt.signcolumn = 'no'
-  vim.opt.fillchars = { eob = ' ' }
+  vim.o.number = false
+  vim.o.relativenumber = false
+  vim.o.laststatus = 0
+  vim.o.signcolumn = 'no'
+  vim.o.fillchars = { eob = ' ' }
 
   -- TODO: This seems to not be wide enough for italics...
-  vim.opt.guifont = 'Monaspace_Argon:h10'
+  vim.o.guifont = 'Monaspace_Argon:h10'
 
   vim.keymap.set('n', '<Esc><Esc>', '<Cmd>w|call firenvim#hide_frame()<CR>')
   vim.api.nvim_create_autocmd('BufEnter', {
