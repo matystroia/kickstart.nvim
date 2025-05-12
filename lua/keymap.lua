@@ -83,7 +83,7 @@ vim.keymap.set({ 'i', 'c' }, '<Right>', '<Nop>')
 
 -- Completion
 vim.keymap.set('i', '<C-f>', '<C-X><C-F>')
-vim.keymap.set('i', '<C-l>', '<C-X><C-F>')
+vim.keymap.set('i', '<C-l>', '<C-X><C-L>')
 
 -- Misc
 vim.keymap.set({ 'n', 'v' }, '<Leader>/', function()
@@ -92,12 +92,4 @@ end, {
   expr = true,
   remap = true,
   desc = 'Toggle comment',
-})
-
-vim.api.nvim_create_autocmd('CmdwinEnter', {
-  group = vim.api.nvim_create_augroup('cmdwin-keep-open', { clear = true }),
-  callback = function()
-    vim.keymap.set('n', '<C-CR>', '<CR>q:', { buffer = true })
-  end,
-  desc = 'Execute command and reopen command window',
 })
