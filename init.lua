@@ -31,7 +31,7 @@ vim.o.splitright = true
 vim.o.splitbelow = true
 
 vim.o.list = true
-vim.o.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 vim.o.softtabstop = 4
 vim.o.shiftwidth = 4
@@ -110,6 +110,30 @@ vim.api.nvim_create_user_command('Scratch', function(opts)
 
   vim.api.nvim_set_current_buf(buf)
 end, { nargs = '?', range = true, desc = 'Create scratch buffer' })
+
+vim.api.nvim_create_user_command('GitHubUrl', function(opts)
+  local remote = vim.fn.FugitiveRemote()
+  if remote.host ~= 'github.com' then
+    return vim.notify('Not a GitHub repo', vim.log.levels.ERROR)
+  end
+
+  local remote_path = remote.path:gsub('%.git$', '')
+  local head = vim.fn.FugitiveHead()
+
+  local file_path = vim.fn.FugitivePath()
+  local relative_path = file_path:gsub('^' .. vim.fn.FugitiveWorkTree() .. '/', '')
+
+  local lines = ''
+  if opts.range ~= 0 then
+    lines = '#L' .. opts.line1 .. '-L' .. opts.line2
+  end
+
+  -- TODO: Absolute commit path
+  local url = string.format('https://github.com/%s/blob/%s/%s%s', remote_path, head, relative_path, lines)
+
+  vim.fn.setreg('+', url)
+  vim.print 'Copied to clipboard'
+end, { range = true, desc = 'Get GitHub URL' })
 
 -- Terminal padding and background color
 require('custom.terms').setup { 'wezterm' }
