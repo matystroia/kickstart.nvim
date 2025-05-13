@@ -34,6 +34,19 @@ local function setup()
     pattern = 'github.com_*.txt',
     command = 'set filetype=markdown',
   })
+
+  vim.api.nvim_create_autocmd({ 'TextChanged', 'TextChangedI' }, {
+    callback = function()
+      if vim.g.timer_started == true then
+        return
+      end
+      vim.g.timer_started = true
+      vim.fn.timer_start(5000, function()
+        vim.g.timer_started = false
+        vim.cmd 'silent write'
+      end)
+    end,
+  })
 end
 
 return {
