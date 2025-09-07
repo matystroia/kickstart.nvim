@@ -86,6 +86,8 @@ vim.keymap.set('i', '<C-f>', '<C-X><C-F>')
 vim.keymap.set('i', '<C-l>', '<C-X><C-L>')
 
 -- Misc
+vim.keymap.set('n', '<Leader><Leader>', 'zz', { noremap = true })
+
 vim.keymap.set({ 'n', 'v' }, '<Leader>/', function()
   return vim.api.nvim_get_mode().mode == 'n' and 'gcc' or 'gc'
 end, {

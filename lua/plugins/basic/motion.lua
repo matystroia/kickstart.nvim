@@ -17,10 +17,10 @@ return {
     dependencies = { 'tpope/vim-repeat' },
     config = function()
       local leap = require 'leap'
-      leap.opts.case_sensitive = false
+      leap.opts.case_sensitive = true
 
-      vim.keymap.set('n', 's', '<Plug>(leap-forward)')
-      vim.keymap.set('n', 'S', '<Plug>(leap-backward)')
+      vim.keymap.set('n', 'z', '<Plug>(leap-forward)')
+      vim.keymap.set('n', 'Z', '<Plug>(leap-backward)')
 
       vim.api.nvim_set_hl(0, 'LeapBackdrop', { link = 'Whitespace' })
     end,
