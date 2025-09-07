@@ -25,4 +25,30 @@ return {
       vim.api.nvim_set_hl(0, 'LeapBackdrop', { link = 'Whitespace' })
     end,
   },
+  {
+    'chrisgrieser/nvim-spider',
+    keys = {
+      {
+        '<Leader><Leader>w',
+        function()
+          require('spider').motion 'w'
+        end,
+        mode = { 'n', 'x', 'o' },
+      },
+      {
+        '<Leader><Leader>e',
+        function()
+          require('spider').motion 'e'
+        end,
+        mode = { 'n', 'x', 'o' },
+      },
+      {
+        '<Leader><Leader>b',
+        function()
+          require('spider').motion 'b'
+        end,
+        mode = { 'n', 'x', 'o' },
+      },
+    },
+  },
 }
