@@ -16,9 +16,10 @@ return {
       },
     },
     config = function()
+      -- TODO: Ensure installed
       local formatters_by_ft = {
         lua = { 'stylua' },
-        python = { 'isort', 'black' },
+        python = { 'ruff_format', 'isort' },
         sh = { 'shfmt' },
       }
       local general_formatters = {

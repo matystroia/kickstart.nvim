@@ -1,14 +1,9 @@
 --- @type LazyPluginSpec[]
 return {
   {
-    -- TODO: Lazy load
     'neovim/nvim-lspconfig',
     dependencies = {
       { 'mason-org/mason.nvim', opts = {} },
-      { 'mason-org/mason-lspconfig.nvim', opts = {} },
-      { 'WhoIsSethDaniel/mason-tool-installer.nvim', opts = {} },
-
-      'saghen/blink.cmp',
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -116,6 +111,12 @@ return {
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       --- @type { [string]: vim.lsp.Config }
       local servers = {
+        basedpyright = {},
+        bashls = {
+          filetypes = { 'bash', 'sh', 'zsh' },
+        },
+        cssls = {},
+        hyprls = {},
         lua_ls = {
           settings = {
             Lua = {
@@ -123,24 +124,16 @@ return {
             },
           },
         },
-        basedpyright = {},
+        qmlls = {},
+        rust_analyzer = {},
         svelte = {},
         tailwindcss = {},
       }
 
       for server, config in pairs(servers) do
         vim.lsp.config(server, config)
+        vim.lsp.enable(server)
       end
-
-      local ensure_installed = {}
-      vim.list_extend(ensure_installed, { 'lua_ls', 'basedpyright', 'bashls', 'cssls', 'hyprls', 'svelte', 'tailwindcss' })
-      vim.list_extend(ensure_installed, { 'stylua', 'isort', 'black', 'prettierd', 'shfmt' })
-
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-      require('mason-lspconfig').setup {
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_enable = true,
-      }
     end,
   },
   {
@@ -158,6 +151,7 @@ return {
   {
     'pmizio/typescript-tools.nvim',
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    lazy = true,
     opts = {},
   },
 }
