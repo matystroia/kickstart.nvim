@@ -6,6 +6,9 @@ return {
         theme = 'auto',
         section_separators = '',
         component_separators = '',
+        refresh = {
+          statusline = 100,
+        },
       },
       sections = {
         lualine_a = {
