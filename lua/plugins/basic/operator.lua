@@ -2,7 +2,7 @@
 return {
   -- TODO: Look at all mini.nvim plugins
   {
-    'echasnovski/mini.surround',
+    'nvim-mini/mini.surround',
     opts = {
       n_lines = 500,
     },
