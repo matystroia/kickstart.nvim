@@ -46,22 +46,14 @@ vim.o.scrolloff = 5
 vim.o.confirm = false
 vim.o.termguicolors = true
 
--- Terminal padding and background color
-require('custom.terms').setup { 'wezterm' }
+vim.o.winborder = 'rounded'
 
--- Polling WakaTime CLI
-require('custom.wakatime').setup()
+-- Define project local config in .nvim.lua
+vim.o.exrc = true
 
--- Context line
-require('custom.contextline').setup()
+require('vim._extui').enable {}
 
 require 'autocmd'
+require 'usercmd'
 require 'keymap'
 require 'plugins'
-
--- Workspace config
-local workspace_config = vim.fs.joinpath(vim.uv.cwd(), '.nvim.lua')
-local stat = vim.uv.fs_stat(workspace_config)
-if stat and stat.type == 'file' then
-  dofile(workspace_config)
-end

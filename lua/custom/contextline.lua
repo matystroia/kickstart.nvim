@@ -44,7 +44,14 @@ local function tick(buf)
       hl_group = 'Type',
     },
     {
-      types = { 'function_declaration', 'function_definition', 'arrow_function' },
+      types = { 'impl_item' },
+      render = function(n)
+        return vim.treesitter.get_node_text(n:field('type')[1], buf)
+      end,
+      hl_group = 'Type',
+    },
+    {
+      types = { 'function_declaration', 'function_definition', 'arrow_function', 'function_item' },
       render = function(n)
         local name = n:field('name')[1]
         return name ~= nil and (vim.treesitter.get_node_text(name, buf) .. '()') or '()'
@@ -52,12 +59,21 @@ local function tick(buf)
       hl_group = 'Function',
     },
     {
+      -- Maps
       types = { 'field' },
       render = function(n)
         local name = n:field('name')[1]
         return name ~= nil and vim.treesitter.get_node_text(name, buf) or nil
       end,
       hl_group = '@property',
+    },
+    {
+      -- QML
+      types = { 'ui_object_definition' },
+      render = function(n)
+        return vim.treesitter.get_node_text(n:field('type_name')[1], buf)
+      end,
+      hl_group = 'Type',
     },
   }
 

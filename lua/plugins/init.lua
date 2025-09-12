@@ -19,6 +19,13 @@ local plugin_modules = {
 local firenvim = require 'plugins.firenvim'
 if vim.g.started_by_firenvim then
   firenvim.setup()
+else
+  -- Terminal padding and background color
+  require('custom.terms').setup { 'wezterm' }
+  -- Polling WakaTime CLI
+  require('custom.wakatime').setup()
+  -- Context line
+  require('custom.contextline').setup()
 end
 
 local spec = vim
