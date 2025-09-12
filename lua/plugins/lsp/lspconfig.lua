@@ -62,15 +62,6 @@ return {
         end,
       })
 
-      -- Override the default border for floating (LSP) windows
-      local _open_floating_preview = vim.lsp.util.open_floating_preview
-      ---@diagnostic disable-next-line: duplicate-set-field
-      function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-        opts = opts or {}
-        opts.border = opts.border or 'rounded'
-        return _open_floating_preview(contents, syntax, opts, ...)
-      end
-
       -- Diagnostic
       local diagnostic_cfg = {
         severity_sort = true,
@@ -116,7 +107,7 @@ return {
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-      --- @type { [string]: vim.lsp.Config }
+      --- @type table<string, vim.lsp.Config>
       local servers = {
         basedpyright = {},
         bashls = {
@@ -138,7 +129,9 @@ return {
       }
 
       for server, config in pairs(servers) do
-        vim.lsp.config(server, config)
+        if not vim.tbl_isempty(config) then
+          vim.lsp.config(server, config)
+        end
         vim.lsp.enable(server)
       end
     end,
@@ -153,6 +146,9 @@ return {
         { path = '$HOME/git/wezterm-types', mods = { 'wezterm' } },
         { path = '/usr/share/lua/5.1/fun.lua', mods = { 'fun' } },
       },
+      enabled = function(root_dir)
+        return not vim.uv.fs_stat(root_dir .. '/.luarc.json')
+      end,
     },
   },
   {
