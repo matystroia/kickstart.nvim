@@ -44,6 +44,8 @@ return {
             TelescopeResultsBorder = { fg = theme.ui.bg_m1, bg = theme.ui.bg_m1 },
             TelescopePreviewNormal = { bg = theme.ui.bg_dim },
             TelescopePreviewBorder = { bg = theme.ui.bg_dim, fg = theme.ui.bg_dim },
+
+            MsgSeparator = { bg = 'NONE' },
           }
         end,
       }
