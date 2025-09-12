@@ -7,14 +7,32 @@ return {
   {
     'catgoose/nvim-colorizer.lua',
     event = 'BufReadPre',
-    opts = {
-      lazy_load = true,
-      user_default_options = {
-        names = false,
-        rgb_fn = true,
-        mode = 'virtualtext',
-      },
-    },
+    config = function()
+      local colorizer = require 'colorizer'
+      colorizer.setup {
+        lazy_load = true,
+        user_default_options = {
+          names = false,
+          rgb_fn = true,
+          RRGGBB = true,
+          mode = 'virtualtext',
+          virtualtext = '',
+        },
+      }
+
+      vim.api.nvim_create_autocmd('LspAttach', {
+        group = vim.api.nvim_create_augroup('nvim-colorizer-lsp', { clear = true }),
+        callback = function(event)
+          if not vim.lsp.document_color.is_enabled(event.buf) then
+            return
+          end
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+          if client and client:supports_method 'textDocument/documentColor' then
+            colorizer.detach_from_buffer(event.buf)
+          end
+        end,
+      })
+    end,
   },
   {
     'https://github.com/mbbill/undotree',

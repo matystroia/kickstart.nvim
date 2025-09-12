@@ -103,6 +103,13 @@ return {
         end
       end, { desc = 'LSP: Toggle Diagnostic Lines' })
 
+      vim.api.nvim_create_autocmd('LspAttach', {
+        group = vim.api.nvim_create_augroup('lsp-document-color', { clear = true }),
+        callback = function()
+          vim.lsp.document_color.enable(true, 0, { style = 'virtual' })
+        end,
+      })
+
       --  Add any additional override configuration in the following tables. Available keys are:
       --  - cmd (table): Override the default command used to start the server
       --  - filetypes (table): Override the default list of associated filetypes for the server
