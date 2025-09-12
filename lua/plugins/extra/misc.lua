@@ -36,7 +36,7 @@ return {
   },
   {
     'https://github.com/mbbill/undotree',
-    cmd = 'UndoTreeShow',
+    cmd = 'UndotreeShow',
   },
   -- TODO: Figure this out
   {
