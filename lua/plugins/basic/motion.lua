@@ -27,23 +27,24 @@ return {
   },
   {
     'chrisgrieser/nvim-spider',
+    opts = { skipInsignificantPunctuation = false },
     keys = {
       {
-        '<Leader><Leader>w',
+        '<M-w>',
         function()
           require('spider').motion 'w'
         end,
         mode = { 'n', 'x', 'o' },
       },
       {
-        '<Leader><Leader>e',
+        '<M-e>',
         function()
           require('spider').motion 'e'
         end,
         mode = { 'n', 'x', 'o' },
       },
       {
-        '<Leader><Leader>b',
+        '<M-b>',
         function()
           require('spider').motion 'b'
         end,
