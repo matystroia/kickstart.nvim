@@ -1,3 +1,51 @@
+local function prefix_find_files(opts)
+  local pickers = require 'telescope.pickers'
+  local finders = require 'telescope.finders'
+  local make_entry = require 'telescope.make_entry'
+  local conf = require('telescope.config').values
+
+  opts = opts or {}
+  opts.cwd = opts.cwd or vim.uv.cwd()
+  opts.filetype = opts.filetype or 'f'
+  opts.path_display = {
+    filename_first = {
+      reverse_directories = true,
+    },
+  }
+
+  pickers
+    .new(opts, {
+      finder = finders.new_oneshot_job({ 'fd', '--color', 'never', '-p', '--type', opts.filetype }, {
+        entry_maker = opts.entry_maker or make_entry.gen_from_file(opts),
+        cwd = opts.cwd,
+      }),
+      previewer = conf.grep_previewer(opts),
+      sorter = conf.file_sorter(opts),
+      on_input_filter_cb = function(prompt)
+        local prefix = prompt:match '(([%.%~%/])%2)'
+        if prefix then
+          local cwd
+          if prefix == '..' then
+            cwd = vim.uv.cwd()
+          elseif prefix == '~~' then
+            cwd = vim.fn.getenv 'HOME'
+          elseif prefix == '//' then
+            cwd = '/'
+          end
+          vim.schedule(function()
+            prefix_find_files(vim.tbl_extend('force', opts, {
+              cwd = cwd,
+              default_text = prompt:gsub('[%.%~%/]', ''),
+              prompt_title = ({ ['.'] = 'Current Dir', ['~'] = 'Home', ['/'] = 'Root' })[prefix],
+            }))
+          end)
+          return nil
+        end
+      end,
+    })
+    :find()
+end
+
 --- @type LazyPluginSpec[]
 return {
   {
@@ -14,7 +62,20 @@ return {
     },
     config = function()
       require('telescope').setup {
-        -- pickers = {}
+        defaults = {
+          prompt_prefix = '',
+          selection_caret = ' ',
+          mappings = {
+            n = {
+              ['\\'] = require('telescope.actions').select_vertical,
+              ['|'] = require('telescope.actions').select_horizontal,
+              ['<C-v>'] = require('telescope.actions.layout').toggle_preview,
+            },
+            i = {
+              ['<C-v>'] = require('telescope.actions.layout').toggle_preview,
+            },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -28,42 +89,26 @@ return {
       local builtin = require 'telescope.builtin'
       local themes = require 'telescope.themes'
 
-      vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-      vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-      vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-      vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
-      vim.keymap.set('n', '<leader>so', builtin.oldfiles, { desc = '[S]earch [O]ld' })
+      vim.keymap.set('n', '<Leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
+      vim.keymap.set('n', '<Leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
+      vim.keymap.set('n', '<Leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+      vim.keymap.set('n', '<Leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
+      vim.keymap.set('n', '<Leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
+      vim.keymap.set('n', '<Leader>so', builtin.oldfiles, { desc = '[S]earch [O]ld' })
 
-      vim.keymap.set('n', '<Tab><Tab>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<Leader>sp', function()
+        builtin.find_files { cwd = vim.fs.joinpath(vim.fn.stdpath 'data', 'lazy') }
+      end, { desc = '[S]earch [P]ackages' })
 
-      -- TODO: Query starts with ~ or / -> search in $HOME
-      -- and other VSCode-like prefixes
+      vim.keymap.set('n', '<Leader>s/', function()
+        builtin.current_buffer_fuzzy_find(themes.get_dropdown { previewer = false })
+      end, { desc = '[S]earch buffer' })
+
+      vim.keymap.set('n', '<Tab><Tab>', builtin.buffers, { desc = 'Find buffers' })
+
       vim.keymap.set('n', '<C-p>', function()
-        builtin.find_files(themes.get_dropdown { previewer = false })
-      end, { desc = '[P]ick File (Work Dir)' })
-
-      vim.keymap.set('n', '<C-S-p>', function()
-        builtin.find_files(themes.get_dropdown { cwd = '$HOME', previewer = false })
-      end, { desc = '[P]ick File (Home)' })
-
-      -- Slightly advanced example of overriding default behavior and theme
-      -- vim.keymap.set('n', '<leader>/', function()
-      --   -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-      --   builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-      --     winblend = 10,
-      --     previewer = false,
-      --   })
-      -- end, { desc = '[/] Fuzzily search in current buffer' })
-
-      -- It's also possible to pass additional configuration options.
-      vim.keymap.set('n', '<leader>s/', function()
-        builtin.live_grep {
-          grep_open_files = true,
-          prompt_title = 'Live Grep in Open Files',
-        }
-      end, { desc = '[S]earch [/] in Open Files' })
+        prefix_find_files(themes.get_dropdown { previewer = false, prompt_title = 'Find' })
+      end)
     end,
   },
 }
