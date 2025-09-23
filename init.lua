@@ -51,7 +51,9 @@ vim.o.winborder = 'rounded'
 -- Define project local config in .nvim.lua
 vim.o.exrc = true
 
-require('vim._extui').enable {}
+if not vim.g.neovide and not vim.g.started_by_firenvim then
+  require('vim._extui').enable {}
+end
 
 require 'autocmd'
 require 'usercmd'

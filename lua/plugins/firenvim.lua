@@ -24,6 +24,8 @@ local function setup()
   vim.o.relativenumber = false
   vim.o.laststatus = 0
   vim.o.signcolumn = 'no'
+  vim.o.wrap = true
+  vim.o.cmdheight = 0
   vim.opt.fillchars = { eob = ' ' }
 
   -- TODO: This seems to not be wide enough for italics...
