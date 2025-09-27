@@ -15,11 +15,11 @@ return {
               end
 
               local ret = {}
-              if time.hours then
+              if time.hours > 0 then
                 ret[#ret + 1] = string.format('%sh', time.hours)
               end
-              if time.minutes then
-                ret[#ret + 1] = string.format('%sm', time.hours)
+              if time.minutes > 0 then
+                ret[#ret + 1] = string.format('%sm', time.minutes)
               end
 
               return { { text = table.concat(ret, ' ') .. ' ' } }
