@@ -50,7 +50,7 @@ vim.o.winborder = 'rounded'
 -- Define project local config in .nvim.lua
 vim.o.exrc = true
 
-if not vim.g.neovide and not vim.g.started_by_firenvim then
+if vim.fn.has 'nvim-0.12' and not vim.g.started_by_firenvim then
   require('vim._extui').enable {}
 end
 
