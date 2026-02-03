@@ -5,6 +5,8 @@ vim.keymap.set('n', '<Leader>w', '<Cmd>silent w<CR>')
 -- Buffers
 vim.keymap.set('n', '<Tab>n', '<Cmd>bn<CR>')
 vim.keymap.set('n', '<Tab>p', '<Cmd>bp<CR>')
+vim.keymap.set('n', '<Right>', '<Cmd>bn<CR>')
+vim.keymap.set('n', '<Left>', '<Cmd>bp<CR>')
 vim.keymap.set('n', '<Tab>d', function()
   local buf = vim.api.nvim_win_get_buf(0)
 
@@ -39,16 +41,25 @@ vim.keymap.set('n', '<Leader>ts', function()
   vim.cmd.wincmd 'J'
   vim.api.nvim_win_set_height(0, 10)
 end)
+vim.keymap.set('t', '<C-h>', '<C-\\><C-n><C-w><C-h>')
+vim.keymap.set('t', '<C-j>', '<C-\\><C-n><C-w><C-j>')
+vim.keymap.set('t', '<C-k>', '<C-\\><C-n><C-w><C-k>')
+vim.keymap.set('t', '<C-l>', '<C-\\><C-n><C-w><C-l>')
 
 -- Splits
 vim.keymap.set('n', '\\', '<Cmd>vsplit<CR>')
 vim.keymap.set('n', '|', '<Cmd>split<CR>')
 
 vim.keymap.set('n', '<Leader>a', 'ggVG')
-vim.keymap.set('n', '<Leader>z', '<Cmd>set wrap!<CR>')
+vim.keymap.set('n', '<Leader>tw', '<Cmd>set wrap!<CR>', { desc = '[T]oggle [W]rap' })
 vim.keymap.set('v', '<Leader>x', ':lua<CR>')
 
 vim.keymap.set('n', '<C-n>', '<Cmd>nohls<CR>')
+
+-- Folds
+vim.keymap.set({ 'n', 'v' }, '<Leader>zf', 'zf', { remap = false })
+vim.keymap.set({ 'n', 'v' }, '<Leader>zf', 'zf', { remap = false })
+vim.keymap.set({ 'n', 'v' }, '<Leader>zf', 'zf', { remap = false })
 
 -- Move between windows
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>')
@@ -68,8 +79,8 @@ vim.keymap.set('v', '<A-h>', '<gv')
 vim.keymap.set('v', '<A-l>', '>gv')
 
 -- Move with <Alt-j> and <Alt-k>
-vim.keymap.set('n', '<A-j>', ':m+1<CR>')
-vim.keymap.set('n', '<A-k>', ':m-2<CR>')
+vim.keymap.set('n', '<A-j>', '<Cmd>m+1<CR>')
+vim.keymap.set('n', '<A-k>', '<Cmd>m-2<CR>')
 vim.keymap.set('v', '<A-j>', ":m'>+1<CR>gv")
 vim.keymap.set('v', '<A-k>', ":m'<-2<CR>gv")
 
