@@ -69,10 +69,10 @@ return {
         underline = { severity = vim.diagnostic.severity.ERROR },
         signs = {
           text = {
-            [vim.diagnostic.severity.ERROR] = '󰅚 ',
-            [vim.diagnostic.severity.WARN] = '󰀪 ',
-            [vim.diagnostic.severity.INFO] = '󰋽 ',
-            [vim.diagnostic.severity.HINT] = '󰌶 ',
+            [vim.diagnostic.severity.ERROR] = 'E',
+            [vim.diagnostic.severity.WARN] = 'W',
+            [vim.diagnostic.severity.INFO] = 'I',
+            [vim.diagnostic.severity.HINT] = 'H',
           },
         },
         virtual_text = {
@@ -123,9 +123,9 @@ return {
           },
         },
         qmlls = {},
-        rust_analyzer = {},
         svelte = {},
         tailwindcss = {},
+        nushell = {},
       }
 
       for server, config in pairs(servers) do
@@ -154,7 +154,11 @@ return {
   {
     'pmizio/typescript-tools.nvim',
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
-    lazy = true,
     opts = {},
+  },
+  {
+    'mrcjkb/rustaceanvim',
+    version = '^6',
+    lazy = false,
   },
 }
