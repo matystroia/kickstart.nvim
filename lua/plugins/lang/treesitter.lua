@@ -25,6 +25,7 @@ return {
       indent = { enable = true, disable = { 'ruby' } },
       incremental_selection = {
         enable = true,
+        -- TODO: 0.12 adds an/in
         keymaps = {
           node_incremental = '>',
           node_decremental = '<',
@@ -41,7 +42,7 @@ return {
   },
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    dependencies = { 'nvim-treesitter/nvim-treesitter', 'jinh0/eyeliner.nvim', 'ggandor/leap.nvim' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'jinh0/eyeliner.nvim', { url = 'https://codeberg.org/andyg/leap.nvim' } },
     config = function()
       require('nvim-treesitter.configs').setup {
         textobjects = {
@@ -73,7 +74,7 @@ return {
             goto_next_start = {
               [']f'] = '@function.outer',
               [']s'] = '@statement.outer',
-              [']p'] = '@parameter.inner',
+              [']a'] = '@parameter.inner',
               [']C'] = '@class.outer',
             },
             goto_next_end = {
@@ -83,7 +84,7 @@ return {
             goto_previous_start = {
               ['[f'] = '@function.outer',
               ['[s'] = '@statement.outer',
-              ['[p'] = '@parameter.inner',
+              ['[a'] = '@parameter.inner',
               ['[C'] = '@class.outer',
             },
             goto_previous_end = {
