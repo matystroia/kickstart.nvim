@@ -11,6 +11,8 @@ local whitelist = vim
       vim.iter(require(v)):each(function(vv)
         if type(vv) == 'string' then
           acc[vv] = true
+        elseif vv.url ~= nil then
+          acc[vv.url] = true
         else
           acc[vv[1]] = true
         end
@@ -28,8 +30,14 @@ local function setup()
   vim.o.cmdheight = 0
   vim.opt.fillchars = { eob = ' ' }
 
+  vim.o.spell = true
+  vim.o.spelllang = 'en_us,ro'
+
   -- TODO: This seems to not be wide enough for italics...
-  vim.o.guifont = 'Monaspace_Argon:h10'
+  vim.o.guifont = 'JetBrains Mono:h12'
+
+  vim.keymap.set('n', 'j', 'gj')
+  vim.keymap.set('n', 'k', 'gk')
 
   vim.keymap.set('n', '<Esc><Esc>', '<Cmd>w|call firenvim#hide_frame()<CR>')
   vim.api.nvim_create_autocmd('BufEnter', {
@@ -68,10 +76,7 @@ return {
             selector = 'textarea',
             takeover = 'never',
           },
-          ['github.com'] = {
-            priority = 1,
-            takeover = 'always',
-          },
+          -- TODO: Get github filetype
         },
       }
     end,
