@@ -5,7 +5,6 @@ vim.o.number = true
 vim.o.relativenumber = true
 vim.o.numberwidth = 3
 
-vim.o.mouse = ''
 vim.o.showmode = false
 
 -- Sync clipboard between OS and Neovim.
