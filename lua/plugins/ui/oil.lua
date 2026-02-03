@@ -28,10 +28,10 @@ return {
         },
       }
       vim.keymap.set('n', '<Leader>O', function()
-        require('oil').open_float()
+        require('oil').open()
       end)
       vim.keymap.set('n', '<Leader>o', function()
-        require('oil').open()
+        require('oil').open_float()
       end)
     end,
     dependencies = { 'nvim-tree/nvim-web-devicons' },
