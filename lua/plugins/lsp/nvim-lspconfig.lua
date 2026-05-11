@@ -1,10 +1,10 @@
---- @type LazyPluginSpec
+---@type PlugSpec
 return {
-  'neovim/nvim-lspconfig',
-  dependencies = {
-    { 'mason-org/mason.nvim', opts = {} },
+  src = 'https://github.com/neovim/nvim-lspconfig',
+  deps = {
+    { src = 'https://github.com/mason-org/mason.nvim' },
   },
-  config = function()
+  setup = function()
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
       callback = function(ev)

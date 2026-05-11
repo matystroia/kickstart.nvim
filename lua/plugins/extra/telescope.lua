@@ -46,20 +46,21 @@ local function prefix_find_files(opts)
     :find()
 end
 
---- @type LazyPluginSpec
+---@type PlugSpec
 return {
-  'nvim-telescope/telescope.nvim',
-  event = 'VimEnter',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
+  src = 'https://github.com/nvim-telescope/telescope.nvim',
+  deps = {
+    { src = 'https://github.com/nvim-lua/plenary.nvim' },
     {
-      'nvim-telescope/telescope-fzf-native.nvim',
-      build = 'make',
+      src = 'https://github.com/nvim-telescope/telescope-fzf-native.nvim',
+      build = function(name, cwd)
+        require('plugins.util').build(name, cwd, { 'make' })
+      end,
     },
-    { 'nvim-telescope/telescope-ui-select.nvim' },
-    { 'nvim-tree/nvim-web-devicons' },
+    { src = 'https://github.com/nvim-telescope/telescope-ui-select.nvim' },
+    { src = 'https://github.com/nvim-tree/nvim-web-devicons' },
   },
-  config = function()
+  setup = function()
     require('telescope').setup {
       defaults = {
         prompt_prefix = '',

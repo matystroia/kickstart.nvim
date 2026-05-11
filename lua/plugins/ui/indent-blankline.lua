@@ -1,9 +1,10 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'lukas-reineke/indent-blankline.nvim',
-  main = 'ibl',
-  opts = {
-    indent = { char = '▏' },
-    scope = { enabled = false },
-  },
+  src = 'https://github.com/lukas-reineke/indent-blankline.nvim',
+  setup = function()
+    require('ibl').setup {
+      indent = { char = '▏' },
+      scope = { enabled = false },
+    }
+  end,
 }

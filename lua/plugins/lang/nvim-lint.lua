@@ -1,9 +1,9 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'mfussenegger/nvim-lint',
-  event = { 'BufReadPre' },
-  config = function()
+  src = 'https://github.com/mfussenegger/nvim-lint',
+  setup = function()
     local lint = require 'lint'
+
     lint.linters_by_ft = {
       markdown = { 'markdownlint' },
       json = { 'jsonlint' },

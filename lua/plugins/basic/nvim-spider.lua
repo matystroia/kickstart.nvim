@@ -1,7 +1,7 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'chrisgrieser/nvim-spider',
-  config = function()
+  src = 'https://github.com/chrisgrieser/nvim-spider',
+  setup = function()
     local spider = require 'spider'
     spider.setup { skipInsignificantPunctuation = false }
     vim.keymap.set({ 'n', 'x', 'o' }, '<M-w>', function()

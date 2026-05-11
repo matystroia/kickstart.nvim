@@ -50,16 +50,24 @@ vim.o.winborder = 'rounded'
 -- Define project local config in .nvim.lua
 vim.o.exrc = true
 
-if not vim.g.started_by_firenvim then
+vim.loader.enable()
+
+if vim.g.started_by_firenvim then
+  require('plugins.firenvim').setup()
+else
   require('vim._core.ui2').enable {
     enable = true,
     msg = {
       target = 'cmd',
     },
   }
+  -- Terminal padding and background color
+  require('custom.terms').setup { 'wezterm' }
+  -- Polling WakaTime CLI
+  require('custom.wakatime').setup()
+  -- Context line
+  require('custom.contextline').setup()
 end
-
-vim.loader.enable()
 
 require 'autocmd'
 require 'usercmd'

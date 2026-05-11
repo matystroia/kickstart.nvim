@@ -1,21 +1,28 @@
-local whitelist = vim.iter({}):fold({}, function(acc, v)
-  if v:match '[%a%-%.]/[%a%-%.]' then
-    acc[v] = true
-  else
-    vim.iter(require(v)):each(function(vv)
-      if type(vv) == 'string' then
-        acc[vv] = true
-      elseif vv.url ~= nil then
-        acc[vv.url] = true
-      else
-        acc[vv[1]] = true
-      end
-    end)
-  end
-  return acc
-end)
+local M = {}
 
-local function setup()
+---@type PlugSpec
+M.spec = {
+  src = 'https://github.com/glacambre/firenvim',
+  build = function()
+    vim.cmd.call 'firenvim#install(0)'
+  end,
+  setup = function()
+    vim.g.firenvim_config = {
+      localSettings = {
+        ['.*'] = {
+          cmdline = 'firenvim',
+          content = 'text',
+          priority = 0,
+          selector = 'textarea',
+          takeover = 'never',
+        },
+        -- TODO: Get github filetype
+      },
+    }
+  end,
+}
+
+M.setup = function()
   vim.o.number = false
   vim.o.relativenumber = false
   vim.o.laststatus = 0
@@ -53,31 +60,21 @@ local function setup()
   })
 end
 
-return {
-  spec = {
-    'glacambre/firenvim',
-    build = ':call firenvim#install(0)',
-    cond = function()
-      return vim.g.started_by_firenvim
-    end,
-    init = function()
-      vim.g.firenvim_config = {
-        localSettings = {
-          ['.*'] = {
-            cmdline = 'firenvim',
-            content = 'text',
-            priority = 0,
-            selector = 'textarea',
-            takeover = 'never',
-          },
-          -- TODO: Get github filetype
-        },
-      }
-    end,
-  },
-  whitelist = whitelist,
-  plugin_cond = function(plugin)
-    return not vim.g.started_by_firenvim or whitelist[plugin[1]]
-  end,
-  setup = setup,
-}
+M.whitelist = vim.iter({}):fold({}, function(acc, v)
+  if v:match '[%a%-%.]/[%a%-%.]' then
+    acc[v] = true
+  else
+    vim.iter(require(v)):each(function(vv)
+      if type(vv) == 'string' then
+        acc[vv] = true
+      elseif vv.url ~= nil then
+        acc[vv.url] = true
+      else
+        acc[vv[1]] = true
+      end
+    end)
+  end
+  return acc
+end)
+
+return M

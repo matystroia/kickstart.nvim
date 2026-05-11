@@ -1,8 +1,7 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'catgoose/nvim-colorizer.lua',
-  event = 'BufReadPre',
-  config = function()
+  src = 'https://github.com/catgoose/nvim-colorizer.lua',
+  setup = function()
     local colorizer = require 'colorizer'
     colorizer.setup {
       lazy_load = true,

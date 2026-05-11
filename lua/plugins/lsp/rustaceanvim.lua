@@ -1,5 +1,4 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'mrcjkb/rustaceanvim',
-  lazy = false,
+  src = 'https://github.com/mrcjkb/rustaceanvim',
 }

@@ -1,6 +1,7 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'windwp/nvim-autopairs',
-  event = 'InsertEnter',
-  opts = {},
+  src = 'https://github.com/windwp/nvim-autopairs',
+  setup = function()
+    require('nvim-autopairs').setup {}
+  end,
 }

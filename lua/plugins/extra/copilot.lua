@@ -1,9 +1,8 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'zbirenbaum/copilot.lua',
+  src = 'https://github.com/zbirenbaum/copilot.lua',
   enabled = false,
-  event = 'InsertEnter',
-  config = function()
+  setup = function()
     local copilot = require 'copilot'
     local suggestion = require 'copilot.suggestion'
 

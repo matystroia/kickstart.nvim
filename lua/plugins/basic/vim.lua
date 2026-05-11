@@ -1,16 +1,22 @@
----@type LazyPluginSpec[]
+---@type PlugSpec[]
 return {
-  { 'tpope/vim-fugitive' },
-  { 'tpope/vim-eunuch' },
+  { src = 'https://github.com/tpope/vim-eunuch' },
+  { src = 'https://github.com/tpope/vim-fugitive' },
+  { src = 'https://github.com/tpope/vim-repeat' },
+  { src = 'https://github.com/tridactyl/vim-tridactyl' },
   {
-    'elkowar/yuck.vim',
-    ft = 'yuck',
-    dependencies = {
-      { 'eraserhd/parinfer-rust', build = 'cargo build --release' },
+    src = 'https://github.com/elkowar/yuck.vim',
+    deps = {
+      {
+        src = 'https://github.com/eraserhd/parinfer-rust',
+        build = function(name, path)
+          require('plugins.util').build(name, path, { 'cargo', 'build', '--release' })
+        end,
+      },
     },
   },
   {
-    'tridactyl/vim-tridactyl',
-    ft = 'tridactyl',
+    src = 'https://github.com/wakatime/vim-wakatime',
+    version = vim.version.range '11.3.0',
   },
 }

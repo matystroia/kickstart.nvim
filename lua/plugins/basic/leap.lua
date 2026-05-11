@@ -1,9 +1,10 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  url = 'https://codeberg.org/andyg/leap.nvim',
-  lazy = false,
-  dependencies = { 'tpope/vim-repeat' },
-  config = function()
+  src = 'https://codeberg.org/andyg/leap.nvim',
+  deps = {
+    { src = 'https://github.com/tpope/vim-repeat' },
+  },
+  setup = function()
     local leap = require 'leap'
     leap.opts.vim_opts['go.ignorecase'] = false
 

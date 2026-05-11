@@ -1,7 +1,10 @@
---- @type LazyPluginSpec
+--- @type PlugSpec
 return {
-  'akinsho/bufferline.nvim',
-  config = function()
+  src = 'https://github.com/akinsho/bufferline.nvim',
+  deps = {
+    { src = 'https://github.com/nvim-tree/nvim-web-devicons' },
+  },
+  setup = function()
     require('bufferline').setup {
       options = {
         show_buffer_close_icons = false,
@@ -31,5 +34,4 @@ return {
     vim.keymap.set('n', '<Tab>D', '<Cmd>BufferLinePickClose<CR>')
     vim.keymap.set('n', '<Tab>o', '<Cmd>BufferLineCloseOthers<CR>')
   end,
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
 }

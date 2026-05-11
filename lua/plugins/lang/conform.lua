@@ -1,20 +1,9 @@
---- @type LazyPluginSpec
+---@type PlugSpec
 return {
-  'stevearc/conform.nvim',
-  event = { 'BufWritePre' },
-  cmd = { 'ConformInfo' },
-  keys = {
-    {
-      '<leader>f',
-      function()
-        require('conform').format { async = true, lsp_format = 'fallback' }
-      end,
-      mode = '',
-      desc = '[F]ormat buffer',
-    },
-  },
-  config = function()
+  src = 'https://github.com/stevearc/conform.nvim',
+  setup = function()
     -- TODO: Ensure installed
+    local conform = require 'conform'
 
     ---@type table<string, conform.FiletypeFormatterInternal>
     local formatters_by_ft = {
@@ -40,17 +29,7 @@ return {
       end)
     )
 
-    vim.keymap.set('n', '<Leader>tf', function()
-      if vim.b.conform_disabled then
-        vim.b.conform_disabled = false
-        vim.notify('[Conform] Enabled', vim.log.levels.INFO)
-      else
-        vim.b.conform_disabled = true
-        vim.notify('[Conform] Disabled', vim.log.levels.INFO)
-      end
-    end)
-
-    require('conform').setup {
+    conform.setup {
       notify_on_error = false,
       format_on_save = function(bufnr)
         if vim.b[bufnr].conform_disabled then
@@ -69,5 +48,19 @@ return {
         },
       },
     }
+
+    vim.keymap.set('n', '<Leader>f', function()
+      conform.format { async = true, lsp_format = 'fallback' }
+    end, { desc = '[F]ormat buffer' })
+
+    vim.keymap.set('n', '<Leader>tf', function()
+      if vim.b.conform_disabled then
+        vim.b.conform_disabled = false
+        vim.notify('[Conform] Enabled', vim.log.levels.INFO)
+      else
+        vim.b.conform_disabled = true
+        vim.notify('[Conform] Disabled', vim.log.levels.INFO)
+      end
+    end, { desc = '[T]oggle [F]ormat' })
   end,
 }

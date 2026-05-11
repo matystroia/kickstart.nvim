@@ -1,7 +1,10 @@
---- @type LazyPluginSpec
+---@type PlugSpec
 return {
-  'stevearc/oil.nvim',
-  config = function()
+  src = 'https://github.com/stevearc/oil.nvim',
+  deps = {
+    { src = 'https://github.com/nvim-tree/nvim-web-devicons' },
+  },
+  setup = function()
     local oil = require 'oil'
     oil.setup {
       use_default_keymaps = false,
@@ -35,6 +38,4 @@ return {
       oil.open_float()
     end)
   end,
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
-  lazy = false,
 }

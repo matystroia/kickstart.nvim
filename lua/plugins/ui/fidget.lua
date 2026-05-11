@@ -1,7 +1,7 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'j-hui/fidget.nvim',
-  config = function()
+  src = 'https://github.com/j-hui/fidget.nvim',
+  setup = function()
     local fidget = require 'fidget'
     local default_notification = vim.tbl_extend('force', fidget.notification.default_config, {
       icon = '',

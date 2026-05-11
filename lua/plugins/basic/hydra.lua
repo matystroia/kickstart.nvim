@@ -1,12 +1,10 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'nvimtools/hydra.nvim',
-  keys = {
-    { '<C-w>\\', mode = 'n' },
-  },
-  config = function()
-    local Hydra = require 'hydra'
-    Hydra {
+  src = 'https://github.com/nvimtools/hydra.nvim',
+  setup = function()
+    local hydra = require 'hydra'
+    local wince = require 'custom.wince'
+    hydra {
       config = {
         color = 'pink',
         hint = false,
@@ -24,25 +22,25 @@ return {
         {
           'h',
           function()
-            require('custom.wince').resize('left', 5)
+            wince.resize('left', 5)
           end,
         },
         {
           'j',
           function()
-            require('custom.wince').resize('down', 5)
+            wince.resize('down', 5)
           end,
         },
         {
           'k',
           function()
-            require('custom.wince').resize('up', 5)
+            wince.resize('up', 5)
           end,
         },
         {
           'l',
           function()
-            require('custom.wince').resize('right', 5)
+            wince.resize('right', 5)
           end,
         },
         { '<A-h>', '<C-w>H' },

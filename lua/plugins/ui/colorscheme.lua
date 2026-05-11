@@ -1,10 +1,10 @@
---- @type (LazyPluginSpec | string)[]
+---@type PlugSpec[]
 return {
   {
-    'folke/tokyonight.nvim',
+    src = 'https://github.com/folke/tokyonight.nvim',
     enabled = false,
     lazy = false,
-    priority = 1000,
+    priority = 100,
     config = function()
       require('tokyonight').setup {
         style = 'moon',
@@ -15,11 +15,9 @@ return {
     end,
   },
   {
-    'rebelot/kanagawa.nvim',
-    enabled = true,
-    lazy = false,
-    priority = 1000,
-    config = function()
+    src = 'https://github.com/rebelot/kanagawa.nvim',
+    priority = 100,
+    setup = function()
       require('kanagawa').setup {
         theme = 'wave',
         colors = {
@@ -51,9 +49,9 @@ return {
     end,
   },
   {
-    'ellisonleao/gruvbox.nvim',
+    src = 'https://github.com/ellisonleao/gruvbox.nvim',
     enabled = false,
-    priority = 1000,
+    priority = 100,
     config = function()
       require('gruvbox').setup { contrast = 'hard' }
       vim.cmd.colorscheme 'gruvbox'

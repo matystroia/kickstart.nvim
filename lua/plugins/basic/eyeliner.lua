@@ -1,9 +1,8 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'jinh0/eyeliner.nvim',
-  config = function()
-    local eyeliner = require 'eyeliner'
-    eyeliner.setup {
+  src = 'https://github.com/jinh0/eyeliner.nvim',
+  setup = function()
+    require('eyeliner').setup {
       default_keymaps = false,
       highlight_on_key = true,
       dim = true,

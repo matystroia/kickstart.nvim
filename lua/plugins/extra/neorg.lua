@@ -1,12 +1,10 @@
 -- TODO: Figure this out
 
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'nvim-neorg/neorg',
-  lazy = false,
+  src = 'https://github.com/nvim-neorg/neorg',
   enabled = false,
-  version = '*',
-  config = function()
+  setup = function()
     require('neorg').setup {
       load = {
         ['core.defaults'] = {},
@@ -21,8 +19,5 @@ return {
         },
       },
     }
-
-    vim.wo.foldlevel = 99
-    vim.wo.conceallevel = 2
   end,
 }

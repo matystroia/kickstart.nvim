@@ -1,8 +1,7 @@
---- @type LazyPluginSpec
+---@type PlugSpec
 return {
-  'goolord/alpha-nvim',
-  enabled = true,
-  config = function()
+  src = 'https://github.com/goolord/alpha-nvim',
+  setup = function()
     local alpha = require 'alpha'
     local dashboard = require 'alpha.themes.dashboard'
 
@@ -16,7 +15,7 @@ return {
     dashboard.section.buttons.val = {
       dashboard.button('e', '  New', ':ene | startinsert <CR>'),
       dashboard.button('c', '  Config', ':lua require("telescope.builtin").find_files({cwd = vim.env.XDG_CONFIG_HOME})<CR>'),
-      dashboard.button('u', '  Update', ':Lazy update<CR>'),
+      dashboard.button('u', '  Update', ':lua vim.pack.update()<CR>'),
       dashboard.button('q', '  Quit', ':q<CR>'),
       -- TODO: Sessions and MRU
     }

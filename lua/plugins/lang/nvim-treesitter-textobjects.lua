@@ -1,13 +1,12 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'nvim-treesitter/nvim-treesitter-textobjects',
-  branch = 'main',
-  dependencies = { 'nvim-treesitter/nvim-treesitter', 'jinh0/eyeliner.nvim', { url = 'https://codeberg.org/andyg/leap.nvim' } },
-  init = function()
+  src = 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
+  setup = function()
     vim.g.no_plugin_maps = true
-  end,
-  config = function()
-    require('nvim-treesitter-textobjects').setup {
+
+    local textobjects = require 'nvim-treesitter-textobjects'
+
+    textobjects.setup {
       select = {
         lookahead = true,
       },
@@ -16,7 +15,7 @@ return {
       },
     }
 
-    local select = require('nvim-treesitter-textobjects.select').select_textobject
+    local select = textobjects.select_textobject
 
     vim.keymap.set({ 'x', 'o' }, 'if', function()
       select('@function.inner', 'textobjects')
@@ -65,10 +64,11 @@ return {
       vim.treesitter.select('extend_prev', 1)
     end)
 
-    local goto_next_start = require('nvim-treesitter-textobjects.move').goto_next_start
-    local goto_next_end = require('nvim-treesitter-textobjects.move').goto_next_end
-    local goto_prev_start = require('nvim-treesitter-textobjects.move').goto_previous_start
-    local goto_prev_end = require('nvim-treesitter-textobjects.move').goto_previous_end
+    local move = require 'nvim-treesitter-textobjects.move'
+    local goto_next_start = move.goto_next_start
+    local goto_next_end = move.goto_next_end
+    local goto_prev_start = move.goto_previous_start
+    local goto_prev_end = move.goto_previous_end
 
     vim.keymap.set({ 'n', 'x', 'o' }, ']f', function()
       goto_next_start('@function.outer', 'textobjects')

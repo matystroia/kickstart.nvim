@@ -1,6 +1,10 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'folke/todo-comments.nvim',
-  dependencies = { 'nvim-lua/plenary.nvim' },
-  opts = { signs = false },
+  src = 'https://github.com/folke/todo-comments.nvim',
+  deps = {
+    { src = 'https://github.com/nvim-lua/plenary.nvim' },
+  },
+  setup = function()
+    require('todo-comments').setup { signs = false }
+  end,
 }

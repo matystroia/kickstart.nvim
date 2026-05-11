@@ -1,10 +1,10 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'nvim-treesitter/nvim-treesitter',
-  branch = 'main',
-  lazy = false,
-  build = ':TSUpdate',
-  init = function()
+  src = 'https://github.com/nvim-treesitter/nvim-treesitter',
+  build = function()
+    vim.cmd 'TSUpdate'
+  end,
+  setup = function()
     -- TODO: ensure_installed
 
     vim.api.nvim_create_autocmd('FileType', {

@@ -1,5 +1,4 @@
----@type LazyPluginSpec
+---@type PlugSpec
 return {
-  'https://github.com/mbbill/undotree',
-  cmd = 'UndotreeShow',
+  src = 'https://github.com/mbbill/undotree',
 }
