@@ -58,8 +58,6 @@ vim.keymap.set('n', '<C-n>', '<Cmd>nohls<CR>')
 
 -- Folds
 vim.keymap.set({ 'n', 'v' }, '<Leader>zf', 'zf', { remap = false })
-vim.keymap.set({ 'n', 'v' }, '<Leader>zf', 'zf', { remap = false })
-vim.keymap.set({ 'n', 'v' }, '<Leader>zf', 'zf', { remap = false })
 
 -- Move between windows
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>')
