@@ -3,6 +3,7 @@ return {
   {
     'wakatime/vim-wakatime',
     lazy = false,
+    version = '11.3.0',
   },
   {
     'catgoose/nvim-colorizer.lua',
@@ -19,19 +20,6 @@ return {
           virtualtext = '',
         },
       }
-
-      vim.api.nvim_create_autocmd('LspAttach', {
-        group = vim.api.nvim_create_augroup('nvim-colorizer-lsp', { clear = true }),
-        callback = function(event)
-          if not vim.lsp.document_color.is_enabled(event.buf) then
-            return
-          end
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client:supports_method 'textDocument/documentColor' then
-            colorizer.detach_from_buffer(event.buf)
-          end
-        end,
-      })
     end,
   },
   {
