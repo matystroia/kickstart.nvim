@@ -7,12 +7,13 @@ return {
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
-        group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
-        callback = function(event)
+        group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
+        callback = function(ev)
+          ---@cast ev {buf: integer, data: vim.event.lspattach.data}
           local map = function(keys, func, desc, mode)
             mode = mode or 'n'
             local prefix = vim.startswith(keys, 'gr') and '[G]o [R]ef ' or ' '
-            vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. prefix .. desc })
+            vim.keymap.set(mode, keys, func, { buffer = ev.buf, desc = 'LSP: ' .. prefix .. desc })
           end
 
           map('grn', vim.lsp.buf.rename, 'Re[n]ame')
@@ -30,56 +31,56 @@ return {
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
-            local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+          local client = vim.lsp.get_client_by_id(ev.data.client_id)
+          if client and client:supports_method('textDocument/documentHighlight', ev.buf) then
+            local highlight_augroup = vim.api.nvim_create_augroup('lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-              buffer = event.buf,
+              buffer = ev.buf,
               group = highlight_augroup,
               callback = vim.lsp.buf.document_highlight,
             })
 
             vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-              buffer = event.buf,
+              buffer = ev.buf,
               group = highlight_augroup,
               callback = vim.lsp.buf.clear_references,
             })
 
             vim.api.nvim_create_autocmd('LspDetach', {
-              group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-              callback = function(event2)
+              group = vim.api.nvim_create_augroup('lsp-detach', { clear = true }),
+              callback = function(ev2)
                 vim.lsp.buf.clear_references()
-                vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+                vim.api.nvim_clear_autocmds { group = 'lsp-highlight', buffer = ev2.buf }
               end,
             })
           end
 
-          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
+          if client and client:supports_method('textDocument/inlayHint', ev.buf) then
             map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = ev.buf })
             end, '[T]oggle Inlay [H]ints')
+          end
+
+          if client and client:supports_method('textDocument/documentColor', ev.buf) then
+            vim.lsp.document_color.enable(true, { bufnr = ev.buf }, { style = 'virtual' })
           end
         end,
       })
 
-      -- Diagnostic
+      ---@type vim.diagnostic.Opts
       local diagnostic_cfg = {
         severity_sort = true,
-        float = { border = 'rounded', source = 'if_many' },
+        float = { source = 'if_many' },
         underline = { severity = vim.diagnostic.severity.ERROR },
-        signs = {
-          text = {
-            [vim.diagnostic.severity.ERROR] = 'E',
-            [vim.diagnostic.severity.WARN] = 'W',
-            [vim.diagnostic.severity.INFO] = 'I',
-            [vim.diagnostic.severity.HINT] = 'H',
-          },
-        },
         virtual_text = {
           source = 'if_many',
           spacing = 2,
-          format = function(diagnostic)
-            return diagnostic.message
+        },
+        jump = {
+          on_jump = function()
+            vim.schedule(function()
+              vim.diagnostic.open_float { scope = 'cursor' }
+            end)
           end,
         },
       }
@@ -94,20 +95,13 @@ return {
         end
       end, { desc = 'LSP: Toggle Diagnostic Lines' })
 
-      vim.api.nvim_create_autocmd('LspAttach', {
-        group = vim.api.nvim_create_augroup('lsp-document-color', { clear = true }),
-        callback = function()
-          vim.lsp.document_color.enable(true, 0, { style = 'virtual' })
-        end,
-      })
-
       --  Add any additional override configuration in the following tables. Available keys are:
       --  - cmd (table): Override the default command used to start the server
       --  - filetypes (table): Override the default list of associated filetypes for the server
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-      --- @type table<string, vim.lsp.Config>
+      ---@type table<string, vim.lsp.Config>
       local servers = {
         basedpyright = {},
         bashls = {
@@ -126,6 +120,7 @@ return {
         svelte = {},
         tailwindcss = {},
         nushell = {},
+        clangd = {},
       }
 
       for server, config in pairs(servers) do
@@ -158,7 +153,6 @@ return {
   },
   {
     'mrcjkb/rustaceanvim',
-    version = '^6',
     lazy = false,
   },
 }
