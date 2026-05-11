@@ -50,20 +50,13 @@ vim.o.winborder = 'rounded'
 -- Define project local config in .nvim.lua
 vim.o.exrc = true
 
-if vim.fn.has 'nvim-0.12' and not vim.g.started_by_firenvim then
-  require('vim._extui').enable {}
-end
-
--- FIXME: Remove when upstream fixes this
-if vim.g.neovide then
-  vim.api.nvim_create_autocmd({ 'VimResized', 'UIEnter' }, {
-    group = vim.api.nvim_create_augroup('extui-hack', { clear = true }),
-    callback = function()
-      vim.defer_fn(function()
-        vim.cmd 'split | close'
-      end, 300)
-    end,
-  })
+if not vim.g.started_by_firenvim then
+  require('vim._core.ui2').enable {
+    enable = true,
+    msg = {
+      target = 'cmd',
+    },
+  }
 end
 
 require 'autocmd'
