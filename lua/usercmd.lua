@@ -51,3 +51,7 @@ vim.api.nvim_create_user_command('GitHubUrl', function(opts)
   vim.fn.setreg('+', url)
   vim.print 'Copied to clipboard'
 end, { range = true, desc = 'Get GitHub URL' })
+
+vim.api.nvim_create_user_command('NeovimLog', function()
+  require('custom.git-log').open { path = vim.fs.normalize '~/.aur/neovim-git/neovim/', n = 200 }
+end, { desc = 'Neovim Github Commits' })
