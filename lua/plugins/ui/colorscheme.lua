@@ -2,6 +2,7 @@
 return {
   {
     'folke/tokyonight.nvim',
+    enabled = false,
     lazy = false,
     priority = 1000,
     config = function()
@@ -11,12 +12,11 @@ return {
           colors.bg_float = colors.bg_dark1
         end,
       }
-      vim.cmd.colorscheme 'tokyonight'
     end,
-    enabled = false,
   },
   {
     'rebelot/kanagawa.nvim',
+    enabled = true,
     lazy = false,
     priority = 1000,
     config = function()
@@ -44,12 +44,19 @@ return {
             TelescopeResultsBorder = { fg = theme.ui.bg_m1, bg = theme.ui.bg_m1 },
             TelescopePreviewNormal = { bg = theme.ui.bg_dim },
             TelescopePreviewBorder = { bg = theme.ui.bg_dim, fg = theme.ui.bg_dim },
-
-            MsgSeparator = { bg = 'NONE' },
           }
         end,
       }
       vim.cmd.colorscheme 'kanagawa-wave'
+    end,
+  },
+  {
+    'ellisonleao/gruvbox.nvim',
+    enabled = false,
+    priority = 1000,
+    config = function()
+      require('gruvbox').setup { contrast = 'hard' }
+      vim.cmd.colorscheme 'gruvbox'
     end,
   },
 }
