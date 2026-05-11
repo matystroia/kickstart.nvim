@@ -1,5 +1,16 @@
 ---@type LazyPluginSpec[]
 return {
-  { url = 'tpope/vim-fugitive' },
-  { url = 'tpope/vim-eunuch' },
+  { 'tpope/vim-fugitive' },
+  { 'tpope/vim-eunuch' },
+  {
+    'elkowar/yuck.vim',
+    ft = 'yuck',
+    dependencies = {
+      { 'eraserhd/parinfer-rust', build = 'cargo build --release' },
+    },
+  },
+  {
+    'tridactyl/vim-tridactyl',
+    ft = 'tridactyl',
+  },
 }
