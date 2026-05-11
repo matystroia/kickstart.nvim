@@ -1,0 +1,34 @@
+runtime/doc/pack.txt --- Text
+520       change or newer tag.                                                  
+521     • 'textDocument/codeAction' (`gra` via |lsp-defaults| or                
+522       |vim.lsp.buf.code_action()|) - show code actions relevant for "plugin 
+...  at                                                                         
+524       updating" (if there are pending updates).                             
+525                                                                             
+526     Parameters: ~                                                           
+527       • {names}  (`string[]?`) List of plugin names to update. Must be mana 
+... ged                                                                         
+runtime/lua/vim/pack.lua --- Lua
+1255 --- - 'textDocument/hover' (`K` via |lsp-defaults| or |vim.lsp.buf.hover() 
+.... |) - show more                                                             
+1256 ---   information at cursor. Like details of particular pending change or  
+.... newer tag.                                                                 
+1257 --- - 'textDocument/codeAction' (`gra` via |lsp-defaults| or |vim.lsp.buf. 
+.... code_action()|) - show                                                     
+1258 ---   code actions relevant for "plugin at cursor". Like "delete" (if plug 
+.... in is not active),                                                         
+1259 ---   "update" or "skip updating" (if there are pending updates).          
+....                                                                            
+1260 ---                                                                        
+1261 --- @param names? string[] List of plugin names to update. Must be managed 
+1262 --- by |vim.pack|, not necessarily already added to current session.       
+runtime/lua/vim/pack/_lsp.lua --- 1/4 --- Lua
+ 35 local group_header_pattern = '^# (%S+)'                                     
+ 36 local plugin_header_pattern = '^## (.+)$'                                   
+ 37                                                                             
+ 38 --- @return { group: string?, name: string?, from: integer?, to: integer? } 
+ ..                                                                             
+ 39 local get_plug_data_at_lnum = function(bufnr, lnum)                         
+ 40   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)             
+ 41   --- @type string, string, integer, integer                                
+

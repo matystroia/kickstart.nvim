@@ -1,0 +1,147 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
+  "name": "difft",
+  "rules": {
+    "source_file": {
+      "type": "REPEAT",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "change"
+          },
+          {
+            "type": "PATTERN",
+            "value": "\\n*"
+          }
+        ]
+      }
+    },
+    "change": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "header"
+        },
+        {
+          "type": "STRING",
+          "value": "\n"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "body"
+        }
+      ]
+    },
+    "header": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "filename"
+        },
+        {
+          "type": "STRING",
+          "value": " --- "
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "progress"
+                },
+                {
+                  "type": "STRING",
+                  "value": " --- "
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "language"
+        }
+      ]
+    },
+    "filename": {
+      "type": "PATTERN",
+      "value": "[a-zA-Z0-9/_.\\-]+"
+    },
+    "progress": {
+      "type": "PATTERN",
+      "value": "\\d+\\/\\d+"
+    },
+    "language": {
+      "type": "PATTERN",
+      "value": "[A-Z][A-Za-z]*"
+    },
+    "body": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "line"
+          },
+          {
+            "type": "STRING",
+            "value": "\n"
+          }
+        ]
+      }
+    },
+    "line": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "line_num"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "code"
+        }
+      ]
+    },
+    "line_num": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "PATTERN",
+          "value": " *\\d+ *"
+        },
+        {
+          "type": "PATTERN",
+          "value": " *\\.+ *"
+        }
+      ]
+    },
+    "padding": {
+      "type": "PATTERN",
+      "value": " *"
+    }
+  },
+  "extras": [],
+  "conflicts": [],
+  "precedences": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "code"
+    }
+  ],
+  "inline": [],
+  "supertypes": [],
+  "reserved": {}
+}

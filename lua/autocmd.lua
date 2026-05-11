@@ -29,3 +29,21 @@ vim.api.nvim_create_autocmd('CmdwinEnter', {
     end, { buffer = true })
   end,
 })
+
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'TSUpdate',
+  callback = function()
+    require('nvim-treesitter.parsers').difft = {
+      install_info = {
+        path = vim.fs.joinpath(vim.fn.stdpath 'config', 'assets/difft-parser'),
+        queries = 'queries/difft',
+      },
+    }
+    require('nvim-treesitter.parsers').gitlog = {
+      install_info = {
+        path = vim.fs.joinpath(vim.fn.stdpath 'config', 'assets/gitlog-parser'),
+        queries = 'queries/gitlog',
+      },
+    }
+  end,
+})
