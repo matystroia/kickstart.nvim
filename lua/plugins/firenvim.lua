@@ -1,25 +1,19 @@
-local whitelist = vim
-  .iter({
-    'plugins.basic.motion',
-    'plugins.basic.operator',
-    'plugins.ui.colorscheme',
-  })
-  :fold({}, function(acc, v)
-    if v:match '[%a%-%.]/[%a%-%.]' then
-      acc[v] = true
-    else
-      vim.iter(require(v)):each(function(vv)
-        if type(vv) == 'string' then
-          acc[vv] = true
-        elseif vv.url ~= nil then
-          acc[vv.url] = true
-        else
-          acc[vv[1]] = true
-        end
-      end)
-    end
-    return acc
-  end)
+local whitelist = vim.iter({}):fold({}, function(acc, v)
+  if v:match '[%a%-%.]/[%a%-%.]' then
+    acc[v] = true
+  else
+    vim.iter(require(v)):each(function(vv)
+      if type(vv) == 'string' then
+        acc[vv] = true
+      elseif vv.url ~= nil then
+        acc[vv.url] = true
+      else
+        acc[vv[1]] = true
+      end
+    end)
+  end
+  return acc
+end)
 
 local function setup()
   vim.o.number = false

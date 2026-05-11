@@ -59,6 +59,8 @@ if not vim.g.started_by_firenvim then
   }
 end
 
+vim.loader.enable()
+
 require 'autocmd'
 require 'usercmd'
 require 'keymap'
