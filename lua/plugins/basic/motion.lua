@@ -17,7 +17,7 @@ return {
     dependencies = { 'tpope/vim-repeat' },
     config = function()
       local leap = require 'leap'
-      leap.opts.case_sensitive = true
+      leap.opts.vim_opts['go.ignorecase'] = false
 
       vim.keymap.set('n', 'z', '<Plug>(leap-forward)')
       vim.keymap.set('n', 'Z', '<Plug>(leap-backward)')
@@ -27,29 +27,19 @@ return {
   },
   {
     'chrisgrieser/nvim-spider',
-    opts = { skipInsignificantPunctuation = false },
-    keys = {
-      {
-        '<M-w>',
-        function()
-          require('spider').motion 'w'
-        end,
-        mode = { 'n', 'x', 'o' },
-      },
-      {
-        '<M-e>',
-        function()
-          require('spider').motion 'e'
-        end,
-        mode = { 'n', 'x', 'o' },
-      },
-      {
-        '<M-b>',
-        function()
-          require('spider').motion 'b'
-        end,
-        mode = { 'n', 'x', 'o' },
-      },
-    },
+    config = function()
+      local spider = require 'spider'
+      spider.setup { skipInsignificantPunctuation = false }
+      vim.keymap.set({ 'n', 'x', 'o' }, '<M-w>', function()
+        spider.motion 'w'
+      end)
+      vim.keymap.set({ 'n', 'x', 'o' }, '<M-e>', function()
+        spider.motion 'e'
+      end)
+      vim.keymap.set({ 'n', 'x', 'o' }, '<M-b>', function()
+        spider.motion 'b'
+      end)
+      vim.keymap.set('i', '<M-w>', '<C-o>d<M-b>', { remap = true })
+    end,
   },
 }
