@@ -6,10 +6,8 @@ return {
     lint.linters_by_ft = {
       markdown = { 'markdownlint' },
       json = { 'jsonlint' },
-      -- python = { 'pylint' },
+      python = { 'ruff' },
     }
-
-    lint.linters.pylint.cmd = './.venv/bin/pylint'
 
     vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
       group = vim.api.nvim_create_augroup('lint', { clear = true }),
