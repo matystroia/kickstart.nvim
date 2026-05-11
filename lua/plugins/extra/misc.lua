@@ -52,5 +52,4 @@ return {
       vim.wo.conceallevel = 2
     end,
   },
-  { 'tpope/vim-eunuch' },
 }
