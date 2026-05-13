@@ -53,3 +53,54 @@ vim.api.nvim_create_user_command(
   function() require('custom.gitlog').open { path = vim.fs.normalize '~/.aur/neovim-git/neovim/', n = 200 } end,
   { desc = 'Neovim Github Commits' }
 )
+
+vim.api.nvim_create_user_command('ColorPicker', function()
+  local n = 12
+
+  local ns = vim.api.nvim_create_namespace 'color-picker'
+  local buf = vim.api.nvim_create_buf(false, true)
+  local win = vim.api.nvim_open_win(
+    buf,
+    true,
+    { relative = 'cursor', row = 0, col = 0, style = 'minimal', width = n + 12, height = 3 }
+  )
+
+  -- TODO: Unicode chars
+  local function slider(val) return string.rep('-', val) .. '|' .. string.rep('-', n - val) end
+
+  local state, labels = { 0, 0, 0 }, { 'R ', 'G ', 'B ' }
+  local function update_buf()
+    local rgb = vim.iter(state):map(function(x) return math.floor(255 / n * x) end):totable()
+    local color = vim.iter(rgb):rev():enumerate():fold(0, function(acc, i, x) return acc + x * math.pow(256, i - 1) end)
+    local hex = '#' .. string.format('%06x', color)
+    vim.api.nvim_set_hl(0, 'Swatch', { fg = hex })
+
+    local lns = vim.iter(state):map(function(v) return slider(v) end):totable()
+    vim.bo[buf].modifiable = true
+    vim.api.nvim_buf_set_lines(buf, 0, -1, true, lns)
+    vim.bo[buf].modifiable = false
+
+    for i = 1, 3 do
+      vim.api.nvim_buf_set_extmark(buf, ns, i - 1, 0, { virt_text = { { labels[i] } }, virt_text_pos = 'inline' })
+      if i <= 2 then
+        vim.api.nvim_buf_set_extmark(buf, ns, i - 1, 0, { virt_text = { { '███████', 'Swatch' } } })
+      end
+    end
+    vim.api.nvim_buf_set_extmark(buf, ns, 2, 0, { virt_text = { { hex, 'Dimmed' } } })
+  end
+
+  local prev_pos = vim.api.nvim_win_get_cursor(win)
+  vim.api.nvim_create_autocmd('CursorMoved', {
+    callback = function()
+      local pos = vim.api.nvim_win_get_cursor(win)
+      if pos[1] ~= prev_pos[1] then
+        vim.api.nvim_win_set_cursor(win, { pos[1], state[pos[1]] })
+      else
+        state[pos[1]] = pos[2]
+        update_buf()
+      end
+      prev_pos = pos
+    end,
+    buf = buf,
+  })
+end, { desc = 'Simple color picker' })
