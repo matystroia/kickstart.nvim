@@ -112,7 +112,6 @@ return {
 
     -- TODO: Move all of this to somewhere more generic, create own repeat_move
     local repeat_move = require 'nvim-treesitter-textobjects.repeatable_move'
-    local eyeliner = require 'eyeliner'
     local leap = require 'leap'
 
     vim.keymap.set({ 'n', 'x', 'o' }, ';', repeat_move.repeat_last_move)
@@ -135,7 +134,6 @@ return {
     vim.iter({ 'f', 'F', 't', 'T' }):each(function(op)
       local forward = op ~= op:upper()
       vim.keymap.set({ 'n', 'x', 'o' }, op, function()
-        eyeliner.highlight { forward = forward }
         repeat_move.last_move = {
           func = op,
           opts = { forward = forward },
