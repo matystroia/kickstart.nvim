@@ -15,52 +15,26 @@ return {
 
     local select = require('nvim-treesitter-textobjects.select').select_textobject
 
-    vim.keymap.set({ 'x', 'o' }, 'if', function()
-      select('@function.inner', 'textobjects')
-    end)
-    vim.keymap.set({ 'x', 'o' }, 'af', function()
-      select('@function.outer', 'textobjects')
-    end)
+    vim.keymap.set({ 'x', 'o' }, 'if', function() select('@function.inner', 'textobjects') end)
+    vim.keymap.set({ 'x', 'o' }, 'af', function() select('@function.outer', 'textobjects') end)
 
-    vim.keymap.set({ 'x', 'o' }, 'iC', function()
-      select('@class.inner', 'textobjects')
-    end)
-    vim.keymap.set({ 'x', 'o' }, 'aC', function()
-      select('@class.outer', 'textobjects')
-    end)
+    vim.keymap.set({ 'x', 'o' }, 'iC', function() select('@class.inner', 'textobjects') end)
+    vim.keymap.set({ 'x', 'o' }, 'aC', function() select('@class.outer', 'textobjects') end)
 
-    vim.keymap.set({ 'x', 'o' }, 'ic', function()
-      select('@call.inner', 'textobjects')
-    end)
-    vim.keymap.set({ 'x', 'o' }, 'ac', function()
-      select('@call.outer', 'textobjects')
-    end)
+    vim.keymap.set({ 'x', 'o' }, 'ic', function() select('@call.inner', 'textobjects') end)
+    vim.keymap.set({ 'x', 'o' }, 'ac', function() select('@call.outer', 'textobjects') end)
 
-    vim.keymap.set({ 'x', 'o' }, 'al', function()
-      select('@assignment.lhs', 'textobjects')
-    end)
-    vim.keymap.set({ 'x', 'o' }, 'ar', function()
-      select('@assignment.rhs', 'textobjects')
-    end)
+    vim.keymap.set({ 'x', 'o' }, 'al', function() select('@assignment.lhs', 'textobjects') end)
+    vim.keymap.set({ 'x', 'o' }, 'ar', function() select('@assignment.rhs', 'textobjects') end)
 
-    vim.keymap.set({ 'x', 'o' }, 'ia', function()
-      select('@parameter.inner', 'textobjects')
-    end)
-    vim.keymap.set({ 'x', 'o' }, 'aa', function()
-      select('@parameter.outer', 'textobjects')
-    end)
+    vim.keymap.set({ 'x', 'o' }, 'ia', function() select('@parameter.inner', 'textobjects') end)
+    vim.keymap.set({ 'x', 'o' }, 'aa', function() select('@parameter.outer', 'textobjects') end)
 
-    vim.keymap.set({ 'x', 'o' }, 'as', function()
-      select('@statement.outer', 'textobjects')
-    end)
+    vim.keymap.set({ 'x', 'o' }, 'as', function() select('@statement.outer', 'textobjects') end)
 
-    vim.keymap.set({ 'x', 'o' }, ']n', function()
-      vim.treesitter.select('extend_next', 1)
-    end)
+    vim.keymap.set({ 'x', 'o' }, ']n', function() vim.treesitter.select('extend_next', 1) end)
 
-    vim.keymap.set({ 'x', 'o' }, '[n', function()
-      vim.treesitter.select('extend_prev', 1)
-    end)
+    vim.keymap.set({ 'x', 'o' }, '[n', function() vim.treesitter.select('extend_prev', 1) end)
 
     local move = require 'nvim-treesitter-textobjects.move'
     local goto_next_start = move.goto_next_start
@@ -68,45 +42,21 @@ return {
     local goto_prev_start = move.goto_previous_start
     local goto_prev_end = move.goto_previous_end
 
-    vim.keymap.set({ 'n', 'x', 'o' }, ']f', function()
-      goto_next_start('@function.outer', 'textobjects')
-    end)
-    vim.keymap.set({ 'n', 'x', 'o' }, ']F', function()
-      goto_next_end('@function.outer', 'textobjects')
-    end)
-    vim.keymap.set({ 'n', 'x', 'o' }, '[f', function()
-      goto_prev_start('@function.outer', 'textobjects')
-    end)
-    vim.keymap.set({ 'n', 'x', 'o' }, '[F', function()
-      goto_prev_end('@function.outer', 'textobjects')
-    end)
+    vim.keymap.set({ 'n', 'x', 'o' }, ']f', function() goto_next_start('@function.outer', 'textobjects') end)
+    vim.keymap.set({ 'n', 'x', 'o' }, ']F', function() goto_next_end('@function.outer', 'textobjects') end)
+    vim.keymap.set({ 'n', 'x', 'o' }, '[f', function() goto_prev_start('@function.outer', 'textobjects') end)
+    vim.keymap.set({ 'n', 'x', 'o' }, '[F', function() goto_prev_end('@function.outer', 'textobjects') end)
 
-    vim.keymap.set({ 'n', 'x', 'o' }, ']s', function()
-      goto_next_start('@statement.outer', 'textobjects')
-    end)
-    vim.keymap.set({ 'n', 'x', 'o' }, ']S', function()
-      goto_next_end('@statement.outer', 'textobjects')
-    end)
-    vim.keymap.set({ 'n', 'x', 'o' }, '[s', function()
-      goto_prev_start('@statement.outer', 'textobjects')
-    end)
-    vim.keymap.set({ 'n', 'x', 'o' }, '[S', function()
-      goto_prev_end('@statement.outer', 'textobjects')
-    end)
+    vim.keymap.set({ 'n', 'x', 'o' }, ']s', function() goto_next_start('@statement.outer', 'textobjects') end)
+    vim.keymap.set({ 'n', 'x', 'o' }, ']S', function() goto_next_end('@statement.outer', 'textobjects') end)
+    vim.keymap.set({ 'n', 'x', 'o' }, '[s', function() goto_prev_start('@statement.outer', 'textobjects') end)
+    vim.keymap.set({ 'n', 'x', 'o' }, '[S', function() goto_prev_end('@statement.outer', 'textobjects') end)
 
-    vim.keymap.set({ 'n', 'x', 'o' }, ']C', function()
-      goto_next_start('@class.outer', 'textobjects')
-    end)
-    vim.keymap.set({ 'n', 'x', 'o' }, '[C', function()
-      goto_prev_start('@class.outer', 'textobjects')
-    end)
+    vim.keymap.set({ 'n', 'x', 'o' }, ']C', function() goto_next_start('@class.outer', 'textobjects') end)
+    vim.keymap.set({ 'n', 'x', 'o' }, '[C', function() goto_prev_start('@class.outer', 'textobjects') end)
 
-    vim.keymap.set({ 'n', 'x', 'o' }, ']a', function()
-      goto_next_start('@parameter.inner', 'textobjects')
-    end)
-    vim.keymap.set({ 'n', 'x', 'o' }, '[a', function()
-      goto_prev_start('@parameter.inner', 'textobjects')
-    end)
+    vim.keymap.set({ 'n', 'x', 'o' }, ']a', function() goto_next_start('@parameter.inner', 'textobjects') end)
+    vim.keymap.set({ 'n', 'x', 'o' }, '[a', function() goto_prev_start('@parameter.inner', 'textobjects') end)
 
     -- TODO: Move all of this to somewhere more generic, create own repeat_move
     local repeat_move = require 'nvim-treesitter-textobjects.repeatable_move'
@@ -120,9 +70,7 @@ return {
       callback = function()
         local forward = leap.state['repeat'].backward ~= true
         repeat_move.last_move = {
-          func = function(opts)
-            leap.leap { ['repeat'] = true, backward = not opts.forward }
-          end,
+          func = function(opts) leap.leap { ['repeat'] = true, backward = not opts.forward } end,
           opts = { forward = forward },
           additional_args = {},
         }

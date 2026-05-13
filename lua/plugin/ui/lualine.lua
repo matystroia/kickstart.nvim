@@ -21,12 +21,8 @@ return {
               local get_mode = require('lualine.utils.mode').get_mode
               return vim.g.active_hydra and vim.g.active_hydra:upper() or get_mode()
             end,
-            color = function()
-              return vim.g.active_hydra and 'ErrorMsg' or nil
-            end,
-            fmt = function(mode)
-              return mode:sub(1, 1)
-            end,
+            color = function() return vim.g.active_hydra and 'ErrorMsg' or nil end,
+            fmt = function(mode) return mode:sub(1, 1) end,
           },
         },
         lualine_b = {
@@ -35,22 +31,16 @@ return {
         },
         lualine_c = {
           { 'filename' },
-          function()
-            return require('custom.contextline').context()
-          end,
+          function() return require('custom.contextline').context() end,
         },
         lualine_x = { 'diagnostics' },
         lualine_y = {
           {
             function()
-              if vim.v.hlsearch == 0 then
-                return ''
-              end
+              if vim.v.hlsearch == 0 then return '' end
 
               local ok, result = pcall(vim.fn.searchcount)
-              if not ok or next(result) == nil then
-                return ''
-              end
+              if not ok or next(result) == nil then return '' end
 
               local denominator = math.min(result.total, result.maxcount)
               return string.format('%d/%d', result.current, denominator)

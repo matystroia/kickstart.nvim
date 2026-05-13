@@ -27,13 +27,9 @@ function M.get_row(buf, row)
   local row = row or vim.api.nvim_win_get_cursor(0)[1]
   local sha = vim.api.nvim_buf_get_text(buf, row - 1, 0, row - 1, 7, {})[1]
 
-  if sha == nil or sha:match '%s' ~= nil then
-    return row, nil
-  end
+  if sha == nil or sha:match '%s' ~= nil then return row, nil end
 
-  local _, c = vim.iter(M.state[buf].commit_map):find(function(k, _)
-    return vim.startswith(k, sha)
-  end)
+  local _, c = vim.iter(M.state[buf].commit_map):find(function(k, _) return vim.startswith(k, sha) end)
 
   return row, c
 end
@@ -53,7 +49,13 @@ function M.get_commits(buf)
         .iter(out.stdout:gmatch '([^\30]+)\30\n')
         :map(function(commit)
           local p = vim.iter(commit:gmatch '[^%z]+'):totable()
-          return { sha = p[1], author_name = p[2], author_email = p[3], timestamp = util.parse_iso8601_utc(p[4]), message = p[5] }
+          return {
+            sha = p[1],
+            author_name = p[2],
+            author_email = p[3],
+            timestamp = util.parse_iso8601_utc(p[4]),
+            message = p[5],
+          }
         end)
         :totable()
 
@@ -65,9 +67,7 @@ function M.get_commits(buf)
         end),
         expanded = {},
       })
-      vim.schedule(function()
-        M.insert_commits(buf)
-      end)
+      vim.schedule(function() M.insert_commits(buf) end)
     end
   )
 end
@@ -94,9 +94,7 @@ function M.open(opts)
 
   vim.keymap.set('n', '<CR>', function()
     local row, c = M.get_row(buf)
-    if c ~= nil then
-      M.expand(buf, row, c)
-    end
+    if c ~= nil then M.expand(buf, row, c) end
   end, { buf = buf })
 
   vim.keymap.set('n', 'gf', function()
@@ -111,15 +109,21 @@ function M.open(opts)
 
     vim.system({ 'git', 'fetch' }, { cwd = opts.path }, function(out)
       if out.code ~= 0 then
-        vim.schedule(function()
-          vim.api.nvim_echo({ { 'error: ' .. (out.stderr or '?') } }, true, vim.tbl_extend('force', progress, { status = 'failed' }))
-        end)
+        vim.schedule(
+          function()
+            vim.api.nvim_echo(
+              { { 'error: ' .. (out.stderr or '?') } },
+              true,
+              vim.tbl_extend('force', progress, { status = 'failed' })
+            )
+          end
+        )
         return
       end
 
-      vim.schedule(function()
-        vim.api.nvim_echo({ { 'done' } }, true, vim.tbl_extend('force', progress, { status = 'success' }))
-      end)
+      vim.schedule(
+        function() vim.api.nvim_echo({ { 'done' } }, true, vim.tbl_extend('force', progress, { status = 'success' })) end
+      )
 
       M.get_commits(buf)
     end)
@@ -127,9 +131,7 @@ function M.open(opts)
 
   vim.keymap.set('n', 'gd', function()
     local row, c = M.get_row(buf)
-    if c ~= nil then
-      M.open_diff(buf, row, c)
-    end
+    if c ~= nil then M.open_diff(buf, row, c) end
   end, { buf = buf })
 
   vim.lsp.start({
@@ -145,14 +147,10 @@ function M.expand(buf, row, c)
   local msg_lines = vim
     .iter(vim.split(c.message, '\n', { plain = true }))
     :skip(1)
-    :map(function(ln)
-      return #ln > 0 and (string.rep(' ', 8) .. ln) or ''
-    end)
+    :map(function(ln) return #ln > 0 and (string.rep(' ', 8) .. ln) or '' end)
     :totable()
 
-  if not vim.tbl_isempty(msg_lines) and #msg_lines[#msg_lines] > 0 then
-    table.insert(msg_lines, '')
-  end
+  if not vim.tbl_isempty(msg_lines) and #msg_lines[#msg_lines] > 0 then table.insert(msg_lines, '') end
 
   if M.state[buf].expanded[c.sha] then
     M.state[buf].expanded[c.sha] = false
@@ -169,9 +167,7 @@ function M.expand(buf, row, c)
       vim.hl.range(buf, ns, 'CommitChore', { row + i - 1, 8 }, { row + i - 1, #match })
     else
       match = ln:match '^%s*Solution:'
-      if match ~= nil then
-        vim.hl.range(buf, ns, 'CommitChore', { row + i - 1, 8 }, { row + i - 1, #match })
-      end
+      if match ~= nil then vim.hl.range(buf, ns, 'CommitChore', { row + i - 1, 8 }, { row + i - 1, #match }) end
     end
   end)
 end
@@ -211,9 +207,11 @@ function M.open_diff(buf, row, c)
 
     local right_start
     for j = vim.str_utfindex(group_lns[1], 'utf-8') - 1, 6, -1 do
-      if vim.iter(group_lns):all(function(ln)
-        return j < #ln and string.match(vim.fn.strcharpart(ln, j, 1), '[%d%.]') ~= nil
-      end) then
+      if
+        vim
+          .iter(group_lns)
+          :all(function(ln) return j < #ln and string.match(vim.fn.strcharpart(ln, j, 1), '[%d%.]') ~= nil end)
+      then
         right_start = j
         while vim.fn.strcharpart(group_lns[#group_lns], right_start - 1, 1):match '%d' do
           right_start = right_start - 1
@@ -234,9 +232,7 @@ function M.open_diff(buf, row, c)
           table.insert(left_hls[#left_hls], hl)
         else
           local start, end_ = hl.start - vim.str_utfindex(left_ln, 'utf-8') - 1, nil
-          if hl.end_ ~= nil then
-            end_ = hl.end_ - vim.str_utfindex(left_ln, 'utf-8') - 1
-          end
+          if hl.end_ ~= nil then end_ = hl.end_ - vim.str_utfindex(left_ln, 'utf-8') - 1 end
           table.insert(right_hls[#right_hls], { codes = hl.codes, start = start, end_ = end_ })
         end
       end)
@@ -244,9 +240,7 @@ function M.open_diff(buf, row, c)
   end
 
   local function create_diff_buf(contents, name)
-    if vim.fn.bufexists(name) == 1 then
-      vim.cmd.bwipe(name)
-    end
+    if vim.fn.bufexists(name) == 1 then vim.cmd.bwipe(name) end
     local diff_buf = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_buf_set_lines(diff_buf, 0, -1, true, contents)
     vim.api.nvim_buf_set_name(diff_buf, name)
@@ -311,8 +305,13 @@ function M.open_diff(buf, row, c)
   hl_buf(left_buf, left_lns, left_hls)
   hl_buf(right_buf, right_lns, right_hls)
 
-  M.state[buf].diff_ext =
-    vim.api.nvim_buf_set_extmark(buf, ns, row - 1, 8, { id = M.state[buf].diff_ext, virt_text = { { '■ ', 'DiagnosticWarn' } }, virt_text_pos = 'inline' })
+  M.state[buf].diff_ext = vim.api.nvim_buf_set_extmark(
+    buf,
+    ns,
+    row - 1,
+    8,
+    { id = M.state[buf].diff_ext, virt_text = { { '■ ', 'DiagnosticWarn' } }, virt_text_pos = 'inline' }
+  )
 end
 
 function M.mk_commit_ln(c)
@@ -324,9 +323,7 @@ function M.mk_commit_ln(c)
 
   local function add_substr(s, hl)
     local ln_len = vim.str_utfindex(ln, 'utf-8')
-    if hl ~= nil then
-      hls[#hls + 1] = { hl, ln_len, ln_len + vim.str_utfindex(s, 'utf-8') }
-    end
+    if hl ~= nil then hls[#hls + 1] = { hl, ln_len, ln_len + vim.str_utfindex(s, 'utf-8') } end
     ln = ln .. s
   end
 
@@ -342,9 +339,7 @@ function M.mk_commit_ln(c)
       local hl = vim.tbl_contains({ 'docs', 'ci', 'test', 'revert' }, type) and 'CommitChore' or 'CommitFeature'
       hls[#hls + 1] = { hl, #ln, #ln + #prefix + 1 }
 
-      if breaking ~= nil then
-        hls[#hls + 1] = { 'ErrorMsg', #ln + #prefix - 1, #ln + #prefix }
-      end
+      if breaking ~= nil then hls[#hls + 1] = { 'ErrorMsg', #ln + #prefix - 1, #ln + #prefix } end
     end
   else
     hls[#hls + 1] = { 'Comment', #ln, #ln + #summary }
@@ -367,9 +362,7 @@ function M.insert_commits(buf)
   util.safe_set_lines(buf, 0, -1, true, lns)
 
   vim.iter(ln_hls):enumerate():each(function(i, hls)
-    vim.iter(hls):each(function(hl)
-      vim.hl.range(buf, ns, hl[1], { i - 1, hl[2] }, { i - 1, hl[3] })
-    end)
+    vim.iter(hls):each(function(hl) vim.hl.range(buf, ns, hl[1], { i - 1, hl[2] }, { i - 1, hl[3] }) end)
   end)
 end
 
@@ -395,11 +388,21 @@ function M.lsp_cmd(dispatchers)
       vim.schedule(function()
         local row = params.position.line + 1
         local _, c = M.get_row(buf, row)
-        vim.system({ 'git', 'diff', '--shortstat', c.sha .. '^!' }, { text = true, cwd = M.state[buf].opts.path }, function(out)
-          vim.schedule(function()
-            callback(nil, { contents = { kind = vim.lsp.protocol.MarkupKind.PlainText, value = out.stdout } }, request_id)
-          end)
-        end)
+        vim.system(
+          { 'git', 'diff', '--shortstat', c.sha .. '^!' },
+          { text = true, cwd = M.state[buf].opts.path },
+          function(out)
+            vim.schedule(
+              function()
+                callback(
+                  nil,
+                  { contents = { kind = vim.lsp.protocol.MarkupKind.PlainText, value = out.stdout } },
+                  request_id
+                )
+              end
+            )
+          end
+        )
       end)
     elseif method == 'textDocument/documentLink' then
       local buf = util.get_buf(params.textDocument.uri)
@@ -423,17 +426,11 @@ function M.lsp_cmd(dispatchers)
     return true, request_id
   end
   function srv.notify(method, params)
-    if method == 'exit' then
-      dispatchers.on_exit(0, 15)
-    end
+    if method == 'exit' then dispatchers.on_exit(0, 15) end
     return true
   end
-  function srv.is_closing()
-    return closing
-  end
-  function srv.terminate()
-    closing = true
-  end
+  function srv.is_closing() return closing end
+  function srv.terminate() closing = true end
 
   return srv
 end

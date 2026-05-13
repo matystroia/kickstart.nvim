@@ -32,13 +32,15 @@ local function prefix_find_files(opts)
           elseif prefix == '//' then
             cwd = '/'
           end
-          vim.schedule(function()
-            prefix_find_files(vim.tbl_extend('force', opts, {
-              cwd = cwd,
-              default_text = prompt:gsub('[%.%~%/]', ''),
-              prompt_title = ({ ['.'] = 'Current Dir', ['~'] = 'Home', ['/'] = 'Root' })[prefix],
-            }))
-          end)
+          vim.schedule(
+            function()
+              prefix_find_files(vim.tbl_extend('force', opts, {
+                cwd = cwd,
+                default_text = prompt:gsub('[%.%~%/]', ''),
+                prompt_title = ({ ['.'] = 'Current Dir', ['~'] = 'Home', ['/'] = 'Root' })[prefix],
+              }))
+            end
+          )
           return nil
         end
       end,
@@ -53,9 +55,7 @@ return {
     { src = 'https://github.com/nvim-lua/plenary.nvim' },
     {
       src = 'https://github.com/nvim-telescope/telescope-fzf-native.nvim',
-      build = function(name, cwd)
-        require('plugin.util').build(name, cwd, { 'make' })
-      end,
+      build = function(name, cwd) require('plugin.util').build(name, cwd, { 'make' }) end,
     },
     { src = 'https://github.com/nvim-telescope/telescope-ui-select.nvim' },
     { src = 'https://github.com/nvim-tree/nvim-web-devicons' },
@@ -96,18 +96,26 @@ return {
     vim.keymap.set('n', '<Leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
     vim.keymap.set('n', '<Leader>so', builtin.oldfiles, { desc = '[S]earch [O]ld' })
 
-    vim.keymap.set('n', '<Leader>sp', function()
-      builtin.find_files { cwd = vim.fs.joinpath(vim.fn.stdpath 'data', 'site/pack/core/opt') }
-    end, { desc = '[S]earch [P]ackages' })
+    vim.keymap.set(
+      'n',
+      '<Leader>sp',
+      function() builtin.find_files { cwd = vim.fs.joinpath(vim.fn.stdpath 'data', 'site/pack/core/opt') } end,
+      { desc = '[S]earch [P]ackages' }
+    )
 
-    vim.keymap.set('n', '<Leader>s/', function()
-      builtin.current_buffer_fuzzy_find(themes.get_dropdown { previewer = false })
-    end, { desc = '[S]earch buffer' })
+    vim.keymap.set(
+      'n',
+      '<Leader>s/',
+      function() builtin.current_buffer_fuzzy_find(themes.get_dropdown { previewer = false }) end,
+      { desc = '[S]earch buffer' }
+    )
 
     vim.keymap.set('n', '<Tab><Tab>', builtin.buffers, { desc = 'Find buffers' })
 
-    vim.keymap.set('n', '<C-p>', function()
-      prefix_find_files(themes.get_dropdown { previewer = false, prompt_title = 'Find' })
-    end)
+    vim.keymap.set(
+      'n',
+      '<C-p>',
+      function() prefix_find_files(themes.get_dropdown { previewer = false, prompt_title = 'Find' }) end
+    )
   end,
 }

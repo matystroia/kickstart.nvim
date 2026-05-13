@@ -1,8 +1,6 @@
 local M = {}
 
-function M.get_buf(uri)
-  return vim._tointeger(uri:match '^git%-pack://(%d+)$')
-end
+function M.get_buf(uri) return vim._tointeger(uri:match '^git%-pack://(%d+)$') end
 
 function M.safe_set_lines(buf, start, end_, strict_indexing, replacement)
   vim.bo[buf].modifiable = true
@@ -53,9 +51,7 @@ function M.since(ts)
 
   local units = { { 60 * 60 * 24, 'd' }, { 60 * 60, 'h' }, { 60, 'm' }, { 1, 's' } }
   for _, u in ipairs(units) do
-    if d >= u[1] then
-      return (d - d % u[1]) / u[1] .. u[2]
-    end
+    if d >= u[1] then return (d - d % u[1]) / u[1] .. u[2] end
   end
 
   return '0s'
@@ -74,9 +70,7 @@ function M.parse_ansi(s)
         local ret, start, offset = {}, 1, 0
         while true do
           local s, e, c = string.find(str, pattern, start)
-          if not s then
-            break
-          end
+          if not s then break end
           start = e + 1
           s = vim.str_utfindex(str, 'utf-8', s - 1) + 1
           e = vim.str_utfindex(str, 'utf-8', e - 1) + 1
@@ -98,9 +92,7 @@ function M.parse_ansi(s)
       for i, hl in ipairs(hls) do
         if hl.codes[1] == 0 then
           for j = i - 1, 1, -1 do
-            if hls[j].codes[1] == 0 or hls[j].end_ ~= nil then
-              break
-            end
+            if hls[j].codes[1] == 0 or hls[j].end_ ~= nil then break end
             hls[j].end_ = hl.start
           end
         end

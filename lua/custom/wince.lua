@@ -1,8 +1,6 @@
 local M = {}
 
-local function intersects(a, b, x, y)
-  return (a >= x and a <= y) or (b >= x and b <= y)
-end
+local function intersects(a, b, x, y) return (a >= x and a <= y) or (b >= x and b <= y) end
 
 local function edge_intersects(e1, e2, axis)
   local a, b
@@ -30,12 +28,8 @@ local function get_neighbors(window_id)
 
   local windows = vim
     .iter(vim.api.nvim_tabpage_list_wins(0))
-    :filter(function(win_id)
-      return win_id ~= window_id
-    end)
-    :map(function(win_id)
-      return { nr = vim.api.nvim_win_get_number(win_id), edges = get_edges(win_id) }
-    end)
+    :filter(function(win_id) return win_id ~= window_id end)
+    :map(function(win_id) return { nr = vim.api.nvim_win_get_number(win_id), edges = get_edges(win_id) } end)
 
   local ret = { left = nil, right = nil, up = nil, down = nil }
   windows:each(function(win)

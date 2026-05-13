@@ -28,9 +28,7 @@ function M.from(spec)
   self.name = spec.src:match '/[^/]+/([^/]+)$'
   self.version = spec.version
 
-  if spec.deps ~= nil then
-    self.deps = vim.iter(spec.deps):map(M.from):totable()
-  end
+  if spec.deps ~= nil then self.deps = vim.iter(spec.deps):map(M.from):totable() end
 
   if spec.enabled ~= nil then
     self.enabled = spec.enabled
@@ -51,8 +49,6 @@ function M.from(spec)
 end
 
 ---@return vim.pack.Spec
-function M:pack_spec()
-  return { src = self.src, version = self.version, data = self }
-end
+function M:pack_spec() return { src = self.src, version = self.version, data = self } end
 
 return M

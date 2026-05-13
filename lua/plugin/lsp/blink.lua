@@ -5,9 +5,7 @@ return {
     { src = 'https://github.com/saghen/blink.lib' },
     { src = 'https://github.com/L3MON4D3/LuaSnip' },
   },
-  build = function()
-    require('blink.cmp').build()
-  end,
+  build = function() require('blink.cmp').build() end,
   setup = function()
     require('blink.cmp').setup {
       keymap = { preset = 'default' },

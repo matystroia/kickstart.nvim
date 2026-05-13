@@ -10,9 +10,9 @@ vim.keymap.set('n', '<Left>', '<Cmd>bp<CR>')
 vim.keymap.set('n', '<Tab>d', function()
   local buf = vim.api.nvim_win_get_buf(0)
 
-  local alt_bufs = vim.iter(vim.api.nvim_list_bufs()):filter(function(b)
-    return b ~= buf and vim.api.nvim_buf_is_loaded(b) and vim.bo[b].buflisted
-  end)
+  local alt_bufs = vim
+    .iter(vim.api.nvim_list_bufs())
+    :filter(function(b) return b ~= buf and vim.api.nvim_buf_is_loaded(b) and vim.bo[b].buflisted end)
 
   local alt_buf = alt_bufs:next()
   if alt_buf ~= nil then
@@ -28,9 +28,7 @@ vim.keymap.set('n', '<Tab>d', function()
   vim.api.nvim_buf_delete(buf, { force = true })
 end)
 vim.keymap.set('n', '<Tab>q', function()
-  vim.iter(vim.api.nvim_list_bufs()):each(function(buf)
-    vim.api.nvim_buf_delete(buf, { force = true })
-  end)
+  vim.iter(vim.api.nvim_list_bufs()):each(function(buf) vim.api.nvim_buf_delete(buf, { force = true }) end)
 end)
 
 -- Terminal
@@ -97,9 +95,7 @@ vim.keymap.set('i', '<C-l>', '<C-X><C-L>')
 -- Misc
 vim.keymap.set('n', '<Leader><Leader>', 'zz', { noremap = true })
 
-vim.keymap.set({ 'n', 'v' }, '<Leader>/', function()
-  return vim.api.nvim_get_mode().mode == 'n' and 'gcc' or 'gc'
-end, {
+vim.keymap.set({ 'n', 'v' }, '<Leader>/', function() return vim.api.nvim_get_mode().mode == 'n' and 'gcc' or 'gc' end, {
   expr = true,
   remap = true,
   desc = 'Toggle comment',

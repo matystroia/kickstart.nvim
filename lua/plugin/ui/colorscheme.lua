@@ -6,9 +6,7 @@ local colorschemes = {
     setup = function()
       require('tokyonight').setup {
         style = 'moon',
-        on_colors = function(colors)
-          colors.bg_float = colors.bg_dark1
-        end,
+        on_colors = function(colors) colors.bg_float = colors.bg_dark1 end,
       }
       vim.cmd.colorscheme 'tokyonight'
     end,

@@ -31,11 +31,7 @@ return {
         max_height = 0.6,
       },
     }
-    vim.keymap.set('n', '<Leader>O', function()
-      oil.open()
-    end)
-    vim.keymap.set('n', '<Leader>o', function()
-      oil.open_float()
-    end)
+    vim.keymap.set('n', '<Leader>O', function() oil.open() end)
+    vim.keymap.set('n', '<Leader>o', function() oil.open_float() end)
   end,
 }

@@ -12,25 +12,17 @@ end
 return {
   setup = function()
     local timer, err = vim.uv.new_timer()
-    if timer == nil then
-      return vim.notify('WakaTime: ' .. err, vim.log.levels.ERROR)
-    end
+    if timer == nil then return vim.notify('WakaTime: ' .. err, vim.log.levels.ERROR) end
 
     local group = vim.api.nvim_create_augroup('wakatime-timer', { clear = true })
     vim.api.nvim_create_autocmd('VimEnter', {
       group = group,
-      callback = function()
-        timer:start(0, interval * 1000, get_today)
-      end,
+      callback = function() timer:start(0, interval * 1000, get_today) end,
     })
     vim.api.nvim_create_autocmd('VimLeavePre', {
       group = group,
-      callback = function()
-        timer:close()
-      end,
+      callback = function() timer:close() end,
     })
   end,
-  today = function()
-    return today
-  end,
+  today = function() return today end,
 }

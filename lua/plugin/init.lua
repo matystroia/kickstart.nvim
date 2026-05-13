@@ -10,9 +10,7 @@ local function collect_mods()
       local mod_path = vim.fs.joinpath(vim.fn.stdpath 'config', 'lua/plugin', mod)
       return vim
         .iter(vim.fs.dir(mod_path))
-        :map(function(name)
-          return string.format('plugin.%s.%s', mod, name:gsub('%.lua$', ''))
-        end)
+        :map(function(name) return string.format('plugin.%s.%s', mod, name:gsub('%.lua$', '')) end)
         :totable()
     end)
     :flatten()
@@ -50,9 +48,7 @@ local function build_plugs()
       enabled = plug.enabled
     end
 
-    if enabled then
-      acc[plug.name] = plug
-    end
+    if enabled then acc[plug.name] = plug end
     return acc
   end)
 
@@ -66,9 +62,7 @@ local function build_plugs()
       end)
     end
   end
-  vim.iter(ret):each(function(_, plug)
-    prioritize(plug)
-  end)
+  vim.iter(ret):each(function(_, plug) prioritize(plug) end)
 
   -- Link existing to deps and add missing deps as top level
   vim.iter(ret):each(function(_, plug)
@@ -89,9 +83,7 @@ end
 local plugs = build_plugs()
 
 local sorted = vim.tbl_values(plugs)
-table.sort(sorted, function(a, b)
-  return a.priority > b.priority
-end)
+table.sort(sorted, function(a, b) return a.priority > b.priority end)
 
 vim.api.nvim_create_autocmd('PackChanged', {
   callback = function(ev)
@@ -99,17 +91,11 @@ vim.api.nvim_create_autocmd('PackChanged', {
     local name, kind = ev.data.spec.name, ev.data.kind
     local plug = ev.data.spec.data
 
-    if not (kind == 'install' or kind == 'update') then
-      return
-    end
+    if not (kind == 'install' or kind == 'update') then return end
 
     if plug.build ~= nil then
       if not ev.data.active then
-        if plug.deps ~= nil then
-          vim.iter(plug.deps):each(function(dep)
-            vim.cmd.packadd(dep.name)
-          end)
-        end
+        if plug.deps ~= nil then vim.iter(plug.deps):each(function(dep) vim.cmd.packadd(dep.name) end) end
         vim.cmd.packadd(name)
       end
       plug.build(name, ev.data.path)
@@ -117,22 +103,13 @@ vim.api.nvim_create_autocmd('PackChanged', {
   end,
 })
 
-local pack_spec = vim
-  .iter(sorted)
-  :map(function(plug)
-    return plug:pack_spec()
-  end)
-  :totable()
+local pack_spec = vim.iter(sorted):map(function(plug) return plug:pack_spec() end):totable()
 
 vim.pack.add(pack_spec)
 
 vim.iter(sorted):each(function(plug)
   if plug.setup ~= nil then
-    if plug.deps ~= nil then
-      vim.iter(plug.deps):each(function(dep)
-        vim.cmd.packadd(dep.name)
-      end)
-    end
+    if plug.deps ~= nil then vim.iter(plug.deps):each(function(dep) vim.cmd.packadd(dep.name) end) end
     plug.setup()
   end
 end)

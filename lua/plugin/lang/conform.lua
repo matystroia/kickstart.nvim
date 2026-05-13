@@ -22,9 +22,7 @@ return {
       'error',
       formatters_by_ft,
       vim.iter(pairs(general_formatters)):fold({}, function(acc, fmt, fts)
-        vim.iter(fts):each(function(ft)
-          acc[ft] = { fmt }
-        end)
+        vim.iter(fts):each(function(ft) acc[ft] = { fmt } end)
         return acc
       end)
     )
@@ -32,9 +30,7 @@ return {
     conform.setup {
       notify_on_error = false,
       format_on_save = function(bufnr)
-        if vim.b[bufnr].conform_disabled then
-          return nil
-        end
+        if vim.b[bufnr].conform_disabled then return nil end
         return {
           timeout_ms = 1500,
           lsp_format = 'fallback',
@@ -49,9 +45,12 @@ return {
       },
     }
 
-    vim.keymap.set('n', '<Leader>f', function()
-      conform.format { async = true, lsp_format = 'fallback' }
-    end, { desc = '[F]ormat buffer' })
+    vim.keymap.set(
+      'n',
+      '<Leader>f',
+      function() conform.format { async = true, lsp_format = 'fallback' } end,
+      { desc = '[F]ormat buffer' }
+    )
 
     vim.keymap.set('n', '<Leader>tf', function()
       if vim.b.conform_disabled then

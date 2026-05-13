@@ -28,12 +28,18 @@ return {
           end
         end, { desc = 'Previous [C]hange' })
 
-        map('v', '<Leader>hs', function()
-          gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
-        end, { desc = '[G]it [S]tage Hunk' })
-        map('v', '<Leader>hr', function()
-          gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
-        end, { desc = '[G]it [R]eset Hunk' })
+        map(
+          'v',
+          '<Leader>hs',
+          function() gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' } end,
+          { desc = '[G]it [S]tage Hunk' }
+        )
+        map(
+          'v',
+          '<Leader>hr',
+          function() gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' } end,
+          { desc = '[G]it [R]eset Hunk' }
+        )
 
         map('n', '<Leader>hs', gitsigns.stage_hunk, { desc = '[H]unk [S]tage' })
         map('n', '<Leader>hr', gitsigns.reset_hunk, { desc = '[H]unk [R]eset' })
@@ -46,9 +52,7 @@ return {
         map('n', '<Leader>gB', gitsigns.blame, { desc = '[G]it [B]lame All' })
         map('n', '<Leader>gd', gitsigns.diffthis, { desc = '[G]it [D]iff Index' })
 
-        map('n', '<Leader>gD', function()
-          gitsigns.diffthis '@'
-        end, { desc = '[G]it [D]iff Last Commit' })
+        map('n', '<Leader>gD', function() gitsigns.diffthis '@' end, { desc = '[G]it [D]iff Last Commit' })
 
         map('n', '<Leader>tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle [B]lame' })
       end,

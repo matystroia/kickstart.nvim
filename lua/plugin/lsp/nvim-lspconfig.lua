@@ -24,9 +24,11 @@ return {
         map('grt', require('telescope.builtin').lsp_type_definitions, '[T]ype')
 
         map('gO', require('telescope.builtin').lsp_document_symbols, '[O]pen Symbols')
-        map('gW', function()
-          require('telescope.builtin').lsp_dynamic_workspace_symbols { path_display = { 'hidden' } }
-        end, '[W]orkspace Symbols')
+        map(
+          'gW',
+          function() require('telescope.builtin').lsp_dynamic_workspace_symbols { path_display = { 'hidden' } } end,
+          '[W]orkspace Symbols'
+        )
 
         -- The following two autocommands are used to highlight references of the
         -- word under your cursor when your cursor rests there for a little while.
@@ -55,9 +57,11 @@ return {
         end
 
         if client and client:supports_method('textDocument/inlayHint', ev.buf) then
-          map('<leader>th', function()
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = ev.buf })
-          end, '[T]oggle Inlay [H]ints')
+          map(
+            '<leader>th',
+            function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = ev.buf }) end,
+            '[T]oggle Inlay [H]ints'
+          )
         end
 
         if client and client:supports_method('textDocument/documentColor', ev.buf) then
@@ -77,9 +81,7 @@ return {
       },
       jump = {
         on_jump = function()
-          vim.schedule(function()
-            vim.diagnostic.open_float { scope = 'cursor' }
-          end)
+          vim.schedule(function() vim.diagnostic.open_float { scope = 'cursor' } end)
         end,
       },
     }
@@ -119,7 +121,10 @@ return {
         on_init = function(client)
           if client.workspace_folders then
             local path = client.workspace_folders[1].name
-            if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.emmyrc.json') or vim.uv.fs_stat(path .. '/.luarc.json')) then
+            if
+              path ~= vim.fn.stdpath 'config'
+              and (vim.uv.fs_stat(path .. '/.emmyrc.json') or vim.uv.fs_stat(path .. '/.luarc.json'))
+            then
               client.config.settings = {}
             end
           end
@@ -147,9 +152,7 @@ return {
     vim.iter({ 'a', 'b', 'c' }):each(function(a) end)
 
     for server, config in pairs(servers) do
-      if not vim.tbl_isempty(config) then
-        vim.lsp.config(server, config)
-      end
+      if not vim.tbl_isempty(config) then vim.lsp.config(server, config) end
       vim.lsp.enable(server)
     end
   end,

@@ -17,9 +17,9 @@ vim.api.nvim_create_user_command('Scratch', function(opts)
 
   -- Attach current LSP client if same filetype
   if opts.fargs[1] == nil or opts.fargs[1] == filetype then
-    vim.iter(vim.lsp.get_clients { bufnr = vim.api.nvim_get_current_buf() }):each(function(client)
-      vim.lsp.buf_attach_client(buf, client.id)
-    end)
+    vim
+      .iter(vim.lsp.get_clients { bufnr = vim.api.nvim_get_current_buf() })
+      :each(function(client) vim.lsp.buf_attach_client(buf, client.id) end)
   end
 
   -- Replace save with format :)
@@ -30,9 +30,7 @@ end, { nargs = '?', range = true, desc = 'Create scratch buffer' })
 
 vim.api.nvim_create_user_command('GitHubUrl', function(opts)
   local remote = vim.fn.FugitiveRemote()
-  if remote.host ~= 'github.com' then
-    return vim.notify('Not a GitHub repo', vim.log.levels.ERROR)
-  end
+  if remote.host ~= 'github.com' then return vim.notify('Not a GitHub repo', vim.log.levels.ERROR) end
 
   local remote_path = remote.path:gsub('%.git$', '')
   local head = vim.fn.FugitiveHead()
@@ -40,9 +38,7 @@ vim.api.nvim_create_user_command('GitHubUrl', function(opts)
   local path = vim.fn.FugitivePath():gsub('^' .. vim.fn.FugitiveWorkTree() .. '/', '')
 
   local lines = ''
-  if opts.range ~= 0 then
-    lines = string.format('#L%d-L%d', opts.line1, opts.line2)
-  end
+  if opts.range ~= 0 then lines = string.format('#L%d-L%d', opts.line1, opts.line2) end
 
   -- TODO: Absolute commit path
   -- TODO: Prompt if permanent or not
@@ -52,6 +48,8 @@ vim.api.nvim_create_user_command('GitHubUrl', function(opts)
   vim.print 'Copied to clipboard'
 end, { range = true, desc = 'Get GitHub URL' })
 
-vim.api.nvim_create_user_command('NeovimLog', function()
-  require('custom.gitlog').open { path = vim.fs.normalize '~/.aur/neovim-git/neovim/', n = 200 }
-end, { desc = 'Neovim Github Commits' })
+vim.api.nvim_create_user_command(
+  'NeovimLog',
+  function() require('custom.gitlog').open { path = vim.fs.normalize '~/.aur/neovim-git/neovim/', n = 200 } end,
+  { desc = 'Neovim Github Commits' }
+)

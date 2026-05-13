@@ -69,23 +69,15 @@ if vim.g.started_by_firenvim then
   vim.api.nvim_create_autocmd({ 'TextChanged', 'TextChangedI' }, {
     group = group,
     callback = function(ev)
-      if vim.list_contains({ 'cmd', 'msg', 'pager', 'dialog' }, vim.bo[ev.buf].filetype) then
-        return
-      end
-      if timers[ev.buf] ~= nil then
-        return
-      end
+      if vim.list_contains({ 'cmd', 'msg', 'pager', 'dialog' }, vim.bo[ev.buf].filetype) then return end
+      if timers[ev.buf] ~= nil then return end
       timers[ev.buf] = vim.uv.new_timer()
-      if timers[ev.buf] == nil then
-        return
-      end
+      if timers[ev.buf] == nil then return end
       timers[ev.buf]:start(100, 0, function()
         timers[ev.buf]:stop()
         timers[ev.buf]:close()
         timers[ev.buf] = nil
-        vim.schedule(function()
-          vim.cmd 'silent write'
-        end)
+        vim.schedule(function() vim.cmd 'silent write' end)
       end)
     end,
   })
@@ -95,9 +87,7 @@ end
 M.spec = {
   src = 'https://github.com/glacambre/firenvim',
   enabled = vim.g.started_by_firenvim == true,
-  build = function()
-    vim.cmd.call 'firenvim#install(0)'
-  end,
+  build = function() vim.cmd.call 'firenvim#install(0)' end,
 }
 
 M.whitelist = {

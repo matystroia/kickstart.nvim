@@ -7,9 +7,7 @@ function M.build(name, cwd, cmd)
     local stderr = result.stderr or ''
     local stdout = result.stdout or ''
     local output = stderr ~= '' and stderr or stdout
-    if output == '' then
-      output = 'No output from build command.'
-    end
+    if output == '' then output = 'No output from build command.' end
     vim.notify(('Build failed for %s:\n%s'):format(name, output), vim.log.levels.ERROR)
   end
 end

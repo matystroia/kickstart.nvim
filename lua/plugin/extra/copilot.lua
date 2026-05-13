@@ -45,16 +45,12 @@ return {
     vim.api.nvim_create_autocmd('User', {
       pattern = 'BlinkCmpMenuOpen',
       group = blink_group,
-      callback = function()
-        vim.b.copilot_suggestion_hidden = true
-      end,
+      callback = function() vim.b.copilot_suggestion_hidden = true end,
     })
     vim.api.nvim_create_autocmd('User', {
       pattern = 'BlinkCmpMenuClose',
       group = blink_group,
-      callback = function()
-        vim.b.copilot_suggestion_hidden = false
-      end,
+      callback = function() vim.b.copilot_suggestion_hidden = false end,
     })
 
     local timer, err = vim.uv.new_timer()
@@ -66,9 +62,9 @@ return {
     local function check_context()
       local row, col = unpack(vim.api.nvim_win_get_cursor(0))
       row, col = row - 1, math.max(0, col - 1) -- Just left of cursor
-      local is_comment = vim.iter(vim.treesitter.get_captures_at_pos(0, row, col)):any(function(cap)
-        return cap.capture == 'comment'
-      end)
+      local is_comment = vim
+        .iter(vim.treesitter.get_captures_at_pos(0, row, col))
+        :any(function(cap) return cap.capture == 'comment' end)
       vim.b.copilot_suggestion_hidden = is_comment
     end
 
@@ -83,22 +79,16 @@ return {
     vim.api.nvim_create_autocmd('InsertEnter', {
       group = comment_group,
       callback = function()
-        if vim.b.has_treesitter then
-          timer:start(0, 500, vim.schedule_wrap(check_context))
-        end
+        if vim.b.has_treesitter then timer:start(0, 500, vim.schedule_wrap(check_context)) end
       end,
     })
     vim.api.nvim_create_autocmd({ 'BufLeave', 'InsertLeave' }, {
       group = comment_group,
-      callback = function()
-        timer:stop()
-      end,
+      callback = function() timer:stop() end,
     })
     vim.api.nvim_create_autocmd('VimLeavePre', {
       group = comment_group,
-      callback = function()
-        timer:close()
-      end,
+      callback = function() timer:close() end,
     })
   end,
 }

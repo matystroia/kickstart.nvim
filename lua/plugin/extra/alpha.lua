@@ -14,7 +14,11 @@ return {
 
     dashboard.section.buttons.val = {
       dashboard.button('e', '  New', ':ene | startinsert <CR>'),
-      dashboard.button('c', '  Config', ':lua require("telescope.builtin").find_files({cwd = vim.env.XDG_CONFIG_HOME})<CR>'),
+      dashboard.button(
+        'c',
+        '  Config',
+        ':lua require("telescope.builtin").find_files({cwd = vim.env.XDG_CONFIG_HOME})<CR>'
+      ),
       dashboard.button('u', '  Update', ':lua vim.pack.update()<CR>'),
       dashboard.button('q', '  Quit', ':q<CR>'),
       -- TODO: Sessions and MRU
