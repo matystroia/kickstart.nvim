@@ -97,7 +97,7 @@ return {
     vim.keymap.set('n', '<Leader>so', builtin.oldfiles, { desc = '[S]earch [O]ld' })
 
     vim.keymap.set('n', '<Leader>sp', function()
-      builtin.find_files { cwd = vim.fs.joinpath(vim.fn.stdpath 'data', 'lazy') }
+      builtin.find_files { cwd = vim.fs.joinpath(vim.fn.stdpath 'data', 'site/pack/core/opt') }
     end, { desc = '[S]earch [P]ackages' })
 
     vim.keymap.set('n', '<Leader>s/', function()

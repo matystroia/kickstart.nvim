@@ -72,4 +72,4 @@ end
 require 'autocmd'
 require 'usercmd'
 require 'keymap'
-require 'plugins'
+require 'plugin'

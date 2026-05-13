@@ -1,4 +1,4 @@
-local Plug = require 'plugins.plug'
+local Plug = require 'plugin.plug'
 
 local mods = { 'basic', 'extra', 'lang', 'lsp', 'ui' }
 
@@ -6,11 +6,11 @@ local function collect_mods()
   return vim
     .iter(mods)
     :map(function(mod)
-      local mod_path = vim.fs.joinpath(vim.fn.stdpath 'config', 'lua/plugins', mod)
+      local mod_path = vim.fs.joinpath(vim.fn.stdpath 'config', 'lua/plugin', mod)
       return vim
         .iter(vim.fs.dir(mod_path))
         :map(function(name)
-          return string.format('plugins.%s.%s', mod, name:gsub('%.lua$', ''))
+          return string.format('plugin.%s.%s', mod, name:gsub('%.lua$', ''))
         end)
         :totable()
     end)

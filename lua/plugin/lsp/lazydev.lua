@@ -1,6 +1,7 @@
 ---@type PlugSpec
 return {
   src = 'https://github.com/folke/lazydev.nvim',
+  enabled = false,
   setup = function()
     require('lazydev').setup {
       library = {
