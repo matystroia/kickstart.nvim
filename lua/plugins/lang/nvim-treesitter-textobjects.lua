@@ -4,9 +4,7 @@ return {
   setup = function()
     vim.g.no_plugin_maps = true
 
-    local textobjects = require 'nvim-treesitter-textobjects'
-
-    textobjects.setup {
+    require('nvim-treesitter-textobjects').setup {
       select = {
         lookahead = true,
       },
@@ -15,7 +13,7 @@ return {
       },
     }
 
-    local select = textobjects.select_textobject
+    local select = require('nvim-treesitter-textobjects.select').select_textobject
 
     vim.keymap.set({ 'x', 'o' }, 'if', function()
       select('@function.inner', 'textobjects')
@@ -141,6 +139,32 @@ return {
         }
         return op
       end, { expr = true })
+    end)
+
+    local select_node = repeat_move.make_repeatable_move(function(opts)
+      if opts.forward then
+        vim.treesitter.select 'parent'
+      else
+        vim.treesitter.select 'child'
+      end
+    end)
+
+    vim.keymap.set('x', 'an', function()
+      repeat_move.last_move = {
+        func = select_node,
+        opts = { forward = true },
+        additional_args = {},
+      }
+      vim.treesitter.select 'parent'
+    end)
+
+    vim.keymap.set('x', 'in', function()
+      repeat_move.last_move = {
+        func = select_node,
+        opts = { forward = false },
+        additional_args = {},
+      }
+      vim.treesitter.select 'child'
     end)
   end,
 }
