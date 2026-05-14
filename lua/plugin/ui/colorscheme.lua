@@ -1,20 +1,19 @@
----@type PlugSpec[]
-return {
-  {
+---@type table<string, PlugSpec>
+local colorschemes = {
+  tokyonight = {
     src = 'https://github.com/folke/tokyonight.nvim',
-    enabled = false,
-    lazy = false,
     priority = 100,
-    config = function()
+    setup = function()
       require('tokyonight').setup {
         style = 'moon',
         on_colors = function(colors)
           colors.bg_float = colors.bg_dark1
         end,
       }
+      vim.cmd.colorscheme 'tokyonight'
     end,
   },
-  {
+  kanagawa = {
     src = 'https://github.com/rebelot/kanagawa.nvim',
     priority = 100,
     setup = function()
@@ -45,16 +44,17 @@ return {
           }
         end,
       }
-      vim.cmd.colorscheme 'kanagawa-wave'
+      vim.cmd.colorscheme 'kanagawa'
     end,
   },
-  {
+  gruvbox = {
     src = 'https://github.com/ellisonleao/gruvbox.nvim',
-    enabled = false,
     priority = 100,
-    config = function()
+    setup = function()
       require('gruvbox').setup { contrast = 'hard' }
       vim.cmd.colorscheme 'gruvbox'
     end,
   },
 }
+
+return colorschemes.tokyonight
