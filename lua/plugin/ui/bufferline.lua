@@ -33,5 +33,7 @@ return {
     vim.keymap.set('n', '<Tab>g', '<Cmd>BufferLinePick<CR>')
     vim.keymap.set('n', '<Tab>D', '<Cmd>BufferLinePickClose<CR>')
     vim.keymap.set('n', '<Tab>o', '<Cmd>BufferLineCloseOthers<CR>')
+
+    vim.api.nvim_exec_autocmds('User', { pattern = 'Bufferline' })
   end,
 }

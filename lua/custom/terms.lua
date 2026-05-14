@@ -60,12 +60,10 @@ return {
       group = group,
     })
     vim.api.nvim_create_autocmd('User', {
-      pattern = 'LazyLoad',
-      callback = function(args)
-        if args.data == 'bufferline.nvim' then
-          local bufferline_bg = string.format('#%06x', vim.api.nvim_get_hl(0, { name = 'BufferLineFill' }).bg)
-          term.enter(bufferline_bg)
-        end
+      pattern = 'Bufferline',
+      callback = function()
+        local bufferline_bg = string.format('#%06x', vim.api.nvim_get_hl(0, { name = 'BufferLineFill' }).bg)
+        term.enter(bufferline_bg)
       end,
     })
   end,
