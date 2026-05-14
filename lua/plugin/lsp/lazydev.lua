@@ -5,7 +5,6 @@ return {
   setup = function()
     require('lazydev').setup {
       library = {
-        { path = vim.fs.joinpath(vim.fn.stdpath 'config', 'lua/plugins/spec'), words = { 'PlugSpec' } },
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
         { path = '$HOME/git/wezterm-types', mods = { 'wezterm' } },
         { path = '/usr/share/lua/5.1/fun.lua', mods = { 'fun' } },

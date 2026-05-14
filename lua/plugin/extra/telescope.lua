@@ -54,7 +54,7 @@ return {
     {
       src = 'https://github.com/nvim-telescope/telescope-fzf-native.nvim',
       build = function(name, cwd)
-        require('plugins.util').build(name, cwd, { 'make' })
+        require('plugin.util').build(name, cwd, { 'make' })
       end,
     },
     { src = 'https://github.com/nvim-telescope/telescope-ui-select.nvim' },
