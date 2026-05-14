@@ -1,4 +1,5 @@
 local Plug = require 'plugin.plug'
+local firenvim = require 'plugin.firenvim'
 
 local mods = { 'basic', 'extra', 'lang', 'lsp', 'ui' }
 
@@ -33,7 +34,7 @@ local function collect_specs()
   local mods = collect_mods()
 
   local ret = vim.iter(mods):map(load_spec):flatten():totable()
-  -- table.insert(ret, Plug.from(firenvim.spec))
+  table.insert(ret, Plug.from(firenvim.spec))
 
   return ret
 end
@@ -42,7 +43,14 @@ local function build_plugs()
   -- Top level plugins
   local plugs = collect_specs()
   local ret = vim.iter(plugs):fold({}, function(acc, plug)
-    if plug.enabled then
+    local enabled
+    if vim.g.started_by_firenvim then
+      enabled = vim.list_contains(firenvim.whitelist, plug.name)
+    else
+      enabled = plug.enabled
+    end
+
+    if enabled then
       acc[plug.name] = plug
     end
     return acc

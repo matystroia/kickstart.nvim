@@ -52,15 +52,14 @@ vim.o.exrc = true
 
 vim.loader.enable()
 
-if vim.g.started_by_firenvim then
-  require('plugins.firenvim').setup()
-else
-  require('vim._core.ui2').enable {
-    enable = true,
-    msg = {
-      target = 'cmd',
-    },
-  }
+require('vim._core.ui2').enable {
+  enable = true,
+  msg = {
+    target = 'cmd',
+  },
+}
+
+if not vim.g.started_by_firenvim then
   -- Terminal padding and background color
   require('custom.terms').setup { 'wezterm' }
   -- Polling WakaTime CLI

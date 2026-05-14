@@ -1,35 +1,33 @@
 local M = {}
 
----@type PlugSpec
-M.spec = {
-  src = 'https://github.com/glacambre/firenvim',
-  build = function()
-    vim.cmd.call 'firenvim#install(0)'
-  end,
-  setup = function()
-    vim.g.firenvim_config = {
-      localSettings = {
-        ['.*'] = {
-          cmdline = 'firenvim',
-          content = 'text',
-          priority = 0,
-          selector = 'textarea',
-          takeover = 'never',
-        },
-        -- TODO: Get github filetype
-      },
-    }
-  end,
+vim.g.firenvim_config = {
+  localSettings = {
+    ['.*'] = {
+      cmdline = 'neovim',
+      content = 'text',
+      priority = 0,
+      selector = 'textarea',
+      takeover = 'never',
+    },
+    -- TODO: Get github filetype
+    ['.+'] = {
+      cmdline = 'neovim',
+      content = 'text',
+      priority = 1,
+      selector = 'textarea[class=myTextArea]',
+      takeover = 'always',
+    },
+  },
 }
 
-M.setup = function()
+if vim.g.started_by_firenvim then
   vim.o.number = false
   vim.o.relativenumber = false
   vim.o.laststatus = 0
   vim.o.signcolumn = 'no'
   vim.o.wrap = true
   vim.o.cmdheight = 0
-  vim.opt.fillchars = { eob = ' ' }
+  vim.o.scrolloff = 0
 
   vim.o.spell = true
   vim.o.spelllang = 'en_us,ro'
@@ -46,35 +44,69 @@ M.setup = function()
     command = 'set filetype=markdown',
   })
 
-  vim.api.nvim_create_autocmd({ 'TextChanged', 'TextChangedI' }, {
+  local group = vim.api.nvim_create_augroup('firenvim', { clear = true })
+  vim.api.nvim_create_autocmd('UIEnter', {
+    group = group,
     callback = function()
-      if vim.g.timer_started == true then
+      local client = vim.api.nvim_get_chan_info(vim.v.event.chan).client
+      if client ~= nil and client.name == 'Firenvim' then
+        -- FIXME: When it starts working correctly
+        vim.schedule(function()
+          require('vim._core.ui2').enable {
+            enable = true,
+            msg = {
+              targets = 'cmd',
+              cmd = { height = 1 },
+            },
+          }
+          vim.o.cmdheight = 0
+        end)
+      end
+    end,
+  })
+  ---@type table<number, uv.uv_timer_t>
+  local timers = {}
+  vim.api.nvim_create_autocmd({ 'TextChanged', 'TextChangedI' }, {
+    group = group,
+    callback = function(ev)
+      if vim.list_contains({ 'cmd', 'msg', 'pager', 'dialog' }, vim.bo[ev.buf].filetype) then
         return
       end
-      vim.g.timer_started = true
-      vim.fn.timer_start(5000, function()
-        vim.g.timer_started = false
-        vim.cmd 'silent write'
+      if timers[ev.buf] ~= nil then
+        return
+      end
+      timers[ev.buf] = vim.uv.new_timer()
+      if timers[ev.buf] == nil then
+        return
+      end
+      timers[ev.buf]:start(100, 0, function()
+        timers[ev.buf]:stop()
+        timers[ev.buf]:close()
+        timers[ev.buf] = nil
+        vim.schedule(function()
+          vim.cmd 'silent write'
+        end)
       end)
     end,
   })
 end
 
-M.whitelist = vim.iter({}):fold({}, function(acc, v)
-  if v:match '[%a%-%.]/[%a%-%.]' then
-    acc[v] = true
-  else
-    vim.iter(require(v)):each(function(vv)
-      if type(vv) == 'string' then
-        acc[vv] = true
-      elseif vv.url ~= nil then
-        acc[vv.url] = true
-      else
-        acc[vv[1]] = true
-      end
-    end)
-  end
-  return acc
-end)
+---@type PlugSpec
+M.spec = {
+  src = 'https://github.com/glacambre/firenvim',
+  enabled = vim.g.started_by_firenvim == true,
+  build = function()
+    vim.cmd.call 'firenvim#install(0)'
+  end,
+}
+
+M.whitelist = {
+  'leap.nvim',
+  'mini.surround',
+  'nvim-autopairs',
+  'nvim-spider',
+  'kanagawa.nvim',
+  'firenvim',
+}
 
 return M
