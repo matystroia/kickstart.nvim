@@ -66,4 +66,5 @@ return {
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
     require('dap-python').setup 'uv'
+  end,
 }
