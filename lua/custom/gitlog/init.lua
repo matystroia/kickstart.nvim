@@ -205,30 +205,35 @@ function M.open_diff(buf, row, c)
       i = i + 1
     end
 
-    local right_start
-    for j = vim.str_utfindex(group_lns[1], 'utf-8') - 1, 6, -1 do
+    local r_start
+    for j = vim.str_utfindex(group_lns[1], 'utf-8') - 1, 0, -1 do
       if
         vim
           .iter(group_lns)
           :all(function(ln) return j < #ln and string.match(vim.fn.strcharpart(ln, j, 1), '[%d%.]') ~= nil end)
       then
-        right_start = j
-        while vim.fn.strcharpart(group_lns[#group_lns], right_start - 1, 1):match '%d' do
-          right_start = right_start - 1
+        local i_ln = #group_lns
+        while not vim.fn.strcharpart(group_lns[i_ln], j, 1):match '%d' do
+          i_ln = i_ln - 1
+        end
+
+        r_start = j
+        while vim.fn.strcharpart(group_lns[i_ln], r_start - 1, 1):match '%d' do
+          r_start = r_start - 1
         end
         break
       end
     end
 
     vim.iter(group_lns):enumerate():each(function(j, ln)
-      local left_ln = vim.fn.strcharpart(ln, 0, right_start - 1)
-      local right_ln = vim.fn.strcharpart(ln, right_start)
+      local left_ln = vim.fn.strcharpart(ln, 0, r_start - 1)
+      local right_ln = vim.fn.strcharpart(ln, r_start)
       insert_ln(left_ln:gsub(' +$', ''), right_ln:gsub(' +$', ''))
 
       table.insert(left_hls, {})
       table.insert(right_hls, {})
       vim.iter(ln_hls[i + j - #group_lns - 1]):each(function(hl)
-        if hl.start < right_start then
+        if hl.start < r_start then
           table.insert(left_hls[#left_hls], hl)
         else
           local start, end_ = hl.start - vim.str_utfindex(left_ln, 'utf-8') - 1, nil
