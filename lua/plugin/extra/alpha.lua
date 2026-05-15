@@ -6,11 +6,12 @@ return {
     local dashboard = require 'alpha.themes.dashboard'
 
     local art_path = vim.fs.joinpath(vim.fn.stdpath 'config', 'assets', 'strigoi.txt')
-    dashboard.section.header.val = vim.fn.readfile(art_path)
+    dashboard.section.header.val = vim.split(io.open(art_path):read '*a', '\n')
 
-    local version = vim.version()
-    local version_str = string.format('v%d.%d.%d (%s)', version.major, version.minor, version.patch, version.build)
-    dashboard.section.footer.val = version_str
+    --- TODO: Check git -> new master commits
+
+    local fortune = vim.system({ 'fortune', '-a' }, { text = true }):wait().stdout
+    dashboard.section.footer.val = vim.split(fortune, '\n')
 
     dashboard.section.buttons.val = {
       dashboard.button('e', '  New', ':ene | startinsert <CR>'),
