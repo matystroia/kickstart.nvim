@@ -1,26 +1,24 @@
-local M = {}
-
-vim.g.firenvim_config = {
-  localSettings = {
-    ['.*'] = {
-      cmdline = 'neovim',
-      content = 'text',
-      priority = 0,
-      selector = 'textarea',
-      takeover = 'never',
-    },
-    -- TODO: Get github filetype
-    ['.+'] = {
-      cmdline = 'neovim',
-      content = 'text',
-      priority = 1,
-      selector = 'textarea[class=myTextArea]',
-      takeover = 'always',
-    },
-  },
-}
-
 if vim.g.started_by_firenvim then
+  vim.g.firenvim_config = {
+    localSettings = {
+      ['.*'] = {
+        cmdline = 'neovim',
+        content = 'text',
+        priority = 0,
+        selector = 'textarea',
+        takeover = 'never',
+      },
+      -- TODO: Get github filetype
+      ['.+'] = {
+        cmdline = 'neovim',
+        content = 'text',
+        priority = 1,
+        selector = 'textarea[class=myTextArea]',
+        takeover = 'always',
+      },
+    },
+  }
+
   vim.o.number = false
   vim.o.relativenumber = false
   vim.o.laststatus = 0
@@ -84,19 +82,8 @@ if vim.g.started_by_firenvim then
 end
 
 ---@type PlugSpec
-M.spec = {
+return {
   src = 'https://github.com/glacambre/firenvim',
   enabled = vim.g.started_by_firenvim == true,
   build = function() vim.cmd.call 'firenvim#install(0)' end,
 }
-
-M.whitelist = {
-  'leap.nvim',
-  'mini.surround',
-  'nvim-autopairs',
-  'nvim-spider',
-  'kanagawa.nvim',
-  'firenvim',
-}
-
-return M

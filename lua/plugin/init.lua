@@ -1,11 +1,24 @@
 local Plug = require 'plugin.plug'
 local firenvim = require 'plugin.firenvim'
 
-local mods = { 'basic', 'extra', 'lang', 'lsp', 'ui' }
+---@param mod_path string
+---@return Plug[]?
+local function load_spec(mod_path)
+  local mod = require(mod_path)
+  if mod == true then
+    return nil
+  elseif vim.islist(mod) then
+    return vim.iter(mod):map(Plug.from):totable()
+  else
+    return { Plug.from(mod) }
+  end
+end
 
+---@return string[]
 local function collect_mods()
+  local plug_dirs = { 'basic', 'extra', 'lang', 'lsp', 'ui' }
   return vim
-    .iter(mods)
+    .iter(plug_dirs)
     :map(function(mod)
       local mod_path = vim.fs.joinpath(vim.fn.stdpath 'config', 'lua/plugin', mod)
       return vim
@@ -17,38 +30,32 @@ local function collect_mods()
     :totable()
 end
 
-local function collect_specs()
-  local function load_spec(mod_path)
-    local mod = require(mod_path)
-    if mod == true then
-      return nil
-    elseif vim.islist(mod) then
-      return vim.iter(mod):map(Plug.from):totable()
-    else
-      return { Plug.from(mod) }
-    end
+---@return Plug[]
+local function collect_plugs()
+  local mods ---@type string[]
+  if vim.g.minimal or vim.g.started_by_firenvim then
+    mods = {
+      'plugin.basic.leap',
+      'plugin.basic.mini-surround',
+      'plugin.basic.nvim-autopairs',
+      'plugin.basic.nvim-spider',
+    }
+  else
+    mods = collect_mods()
   end
 
-  local mods = collect_mods()
-
   local ret = vim.iter(mods):map(load_spec):flatten():totable()
-  table.insert(ret, Plug.from(firenvim.spec))
+  if vim.g.started_by_firenvim then table.insert(ret, Plug.from(firenvim)) end
 
   return ret
 end
 
+---@return Plug[]
 local function build_plugs()
   -- Top level plugins
-  local plugs = collect_specs()
+  local plugs = collect_plugs()
   local ret = vim.iter(plugs):fold({}, function(acc, plug)
-    local enabled
-    if vim.g.started_by_firenvim then
-      enabled = vim.list_contains(firenvim.whitelist, plug.name)
-    else
-      enabled = plug.enabled
-    end
-
-    if enabled then acc[plug.name] = plug end
+    if plug.enabled then acc[plug.name] = plug end
     return acc
   end)
 

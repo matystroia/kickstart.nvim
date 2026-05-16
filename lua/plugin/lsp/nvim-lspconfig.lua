@@ -149,8 +149,6 @@ return {
       clangd = {},
     }
 
-    vim.iter({ 'a', 'b', 'c' }):each(function(a) end)
-
     for server, config in pairs(servers) do
       if not vim.tbl_isempty(config) then vim.lsp.config(server, config) end
       vim.lsp.enable(server)
