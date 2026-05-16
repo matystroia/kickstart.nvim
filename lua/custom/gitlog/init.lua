@@ -84,7 +84,17 @@ function M.open(opts)
   local buf = vim.api.nvim_create_buf(true, true)
   vim.api.nvim_buf_set_name(buf, 'git-pack://' .. buf)
   vim.bo[buf].ft = 'gitlog'
-  vim.api.nvim_win_set_buf(0, buf)
+  local tab_page = vim.api.nvim_open_tabpage(buf, true, {})
+  local win = vim.api.nvim_get_current_win()
+
+  -- TODO: Prevent pack jumplist
+  vim.api.nvim_create_autocmd('WinClosed', {
+    callback = function(ev)
+      if vim._tointeger(ev.match) ~= win then return end
+      vim.api.nvim_buf_delete(buf, { force = true })
+      return true
+    end,
+  })
 
   M.state[buf] = {
     opts = opts,
