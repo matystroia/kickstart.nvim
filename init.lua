@@ -58,11 +58,8 @@ require('vim._core.ui2').enable {
 }
 
 if not vim.g.started_by_firenvim then
-  -- Terminal padding and background color
   require('custom.terms').setup { 'wezterm' }
-  -- Polling WakaTime CLI
   require('custom.wakatime').setup()
-  -- Context line
   require('custom.contextline').setup()
 end
 

@@ -1,4 +1,4 @@
-require 'custom.cmdwin_highlight'
+-- require 'custom.cmdwin_highlight'
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking',
