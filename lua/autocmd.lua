@@ -3,7 +3,10 @@ require 'custom.cmdwin_highlight'
 vim.api.nvim_create_autocmd({ 'TextYankPost', 'TextPutPost' }, {
   desc = 'Highlight when yanking',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-  callback = function() vim.hl.hl_op() end,
+  callback = function(ev)
+    local hl = ev.event == 'TextYankPost' and 'IncSearch' or 'DiffAdd'
+    vim.hl.hl_op { higroup = hl }
+  end,
 })
 
 vim.api.nvim_create_autocmd('FileType', {
