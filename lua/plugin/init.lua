@@ -50,7 +50,7 @@ local function collect_plugs()
   return ret
 end
 
----@return Plug[]
+---@return table<string, Plug>
 local function build_plugs()
   -- Top level plugins
   local plugs = collect_plugs()
@@ -111,7 +111,6 @@ vim.api.nvim_create_autocmd('PackChanged', {
 })
 
 local pack_spec = vim.iter(sorted):map(function(plug) return plug:pack_spec() end):totable()
-
 vim.pack.add(pack_spec)
 
 vim.iter(sorted):each(function(plug)
