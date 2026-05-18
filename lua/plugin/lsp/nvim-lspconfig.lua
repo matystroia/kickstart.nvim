@@ -30,9 +30,8 @@ return {
           '[W]orkspace Symbols'
         )
 
-        -- The following two autocommands are used to highlight references of the
-        -- word under your cursor when your cursor rests there for a little while.
         local client = vim.lsp.get_client_by_id(ev.data.client_id)
+
         if client and client:supports_method('textDocument/documentHighlight', ev.buf) then
           local highlight_augroup = vim.api.nvim_create_augroup('lsp-highlight', { clear = false })
           vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
