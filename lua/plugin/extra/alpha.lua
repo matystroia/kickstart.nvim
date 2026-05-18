@@ -3,6 +3,7 @@
 ---@type PlugSpec
 return {
   src = 'https://github.com/goolord/alpha-nvim',
+  priority = 50,
   setup = function(opts)
     local alpha = require 'alpha'
     local dashboard = require 'alpha.themes.dashboard'
