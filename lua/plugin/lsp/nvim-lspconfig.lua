@@ -67,6 +67,10 @@ return {
         if client and client:supports_method('textDocument/documentColor', ev.buf) then
           vim.lsp.document_color.enable(true, { bufnr = ev.buf }, { style = 'virtual' })
         end
+
+        if client and client:supports_method('textDocument/codeLens', ev.buf) then
+          vim.lsp.codelens.enable(true, { bufnr = ev.buf })
+        end
       end,
     })
 
