@@ -10,6 +10,7 @@ return {
       lua = { 'stylua' },
       python = { 'ruff_format', 'isort' },
       sh = { 'shfmt' },
+      c = { 'clang-format' },
       -- TODO: Enable this when it stops sucking
       -- nu = { 'nufmt' },
     }

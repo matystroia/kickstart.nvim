@@ -139,6 +139,7 @@ return {
             workspace = {
               library = {
                 vim.env.VIMRUNTIME,
+                vim.fs.joinpath(vim.fn.stdpath 'data', 'site/pack/core/opt'),
                 vim.api.nvim_get_runtime_file('lua/lspconfig', false)[1],
               },
             },

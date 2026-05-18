@@ -20,6 +20,9 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 
 vim.o.signcolumn = 'yes'
+vim.o.foldcolumn = 'auto:9'
+vim.o.foldtext = ''
+vim.opt.fillchars = { 'fold: ', 'foldopen:┏', 'foldclose:', 'foldsep:┃' }
 
 vim.o.updatetime = 500
 vim.o.timeoutlen = 500

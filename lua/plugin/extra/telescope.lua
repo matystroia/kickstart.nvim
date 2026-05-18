@@ -23,26 +23,54 @@ local function prefix_find_files(opts)
       sorter = conf.file_sorter(opts),
       on_input_filter_cb = function(prompt)
         local prefix = prompt:match '(([%.%~%/])%2)'
-        if prefix then
-          local cwd
-          if prefix == '..' then
-            cwd = vim.uv.cwd()
-          elseif prefix == '~~' then
-            cwd = vim.fn.getenv 'HOME'
-          elseif prefix == '//' then
-            cwd = '/'
-          end
-          vim.schedule(
-            function()
-              prefix_find_files(vim.tbl_extend('force', opts, {
-                cwd = cwd,
-                default_text = prompt:gsub('[%.%~%/]', ''),
-                prompt_title = ({ ['.'] = 'Current Dir', ['~'] = 'Home', ['/'] = 'Root' })[prefix],
-              }))
-            end
-          )
-          return nil
+        if not prefix then return end
+        local cwd
+        if prefix == '..' then
+          cwd = vim.uv.cwd()
+        elseif prefix == '~~' then
+          cwd = vim.env.HOME
+        elseif prefix == '//' then
+          cwd = '/'
         end
+        vim.schedule(
+          function()
+            prefix_find_files(vim.tbl_extend('force', opts, {
+              cwd = cwd,
+              default_text = prompt:gsub('[%.%~%/]', ''),
+              prompt_title = ({ ['.'] = 'Current Dir', ['~'] = 'Home', ['/'] = 'Root' })[prefix],
+            }))
+          end
+        )
+      end,
+    })
+    :find()
+end
+
+local function find_dirs(opts)
+  local pickers = require 'telescope.pickers'
+  local finders = require 'telescope.finders'
+  local make_entry = require 'telescope.make_entry'
+  local action_state = require 'telescope.actions.state'
+  local action_set = require 'telescope.actions.set'
+  local conf = require('telescope.config').values
+
+  opts = vim.tbl_extend('force', opts or {}, { cwd = vim.env.HOME, filetype = 'd' })
+
+  pickers
+    .new(opts, {
+      finder = finders.new_oneshot_job({ 'fd', '--color', 'never', '-p', '--type', opts.filetype }, {
+        entry_maker = opts.entry_maker or make_entry.gen_from_file(opts),
+        cwd = opts.cwd,
+      }),
+      previewer = conf.file_previewer(opts),
+      sorter = conf.file_sorter(opts),
+      attach_mappings = function(_, map)
+        map({ 'n', 'i' }, '<CR>', function(prompt_bufnr)
+          local entry = action_state.get_selected_entry()
+          vim.cmd.cd(vim.fs.joinpath(vim.env.HOME, entry[1]))
+          action_set.select(prompt_bufnr, 'default')
+        end)
+        return true
       end,
     })
     :find()
@@ -95,6 +123,12 @@ return {
     vim.keymap.set('n', '<Leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
     vim.keymap.set('n', '<Leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
     vim.keymap.set('n', '<Leader>so', builtin.oldfiles, { desc = '[S]earch [O]ld' })
+    vim.keymap.set(
+      'n',
+      '<Leader>sz',
+      function() find_dirs(themes.get_dropdown { previewer = false, prompt_title = 'Z' }) end,
+      { desc = '[S]earch dirs' }
+    )
 
     vim.keymap.set(
       'n',
