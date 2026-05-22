@@ -31,6 +31,7 @@ return {
     vim.keymap.set({ 'x', 'o' }, 'aa', function() select('@parameter.outer', 'textobjects') end)
 
     vim.keymap.set({ 'x', 'o' }, 'as', function() select('@statement.outer', 'textobjects') end)
+    vim.keymap.set({ 'x', 'o' }, 'ib', function() select('@block.inner', 'textobjects') end)
 
     vim.keymap.set({ 'x', 'o' }, ']n', function() vim.treesitter.select('extend_next', 1) end)
 
