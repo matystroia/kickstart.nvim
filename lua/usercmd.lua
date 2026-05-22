@@ -49,9 +49,15 @@ vim.api.nvim_create_user_command('GitHubUrl', function(opts)
 end, { range = true, desc = 'Get GitHub URL' })
 
 vim.api.nvim_create_user_command(
+  'GitLog',
+  function() require('custom.gitlog').open { path = vim.fn.FugitiveWorkTree() } end,
+  { desc = 'Git commits in current repo' }
+)
+
+vim.api.nvim_create_user_command(
   'NeovimLog',
   function() require('custom.gitlog').open { path = vim.fs.normalize '~/.aur/neovim-git/neovim/', n = 200 } end,
-  { desc = 'Neovim Github Commits' }
+  { desc = 'Git commits in Neovim repo' }
 )
 
 vim.api.nvim_create_user_command('ColorPicker', function()

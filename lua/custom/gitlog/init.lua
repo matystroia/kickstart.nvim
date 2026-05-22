@@ -22,9 +22,11 @@ vim.api.nvim_set_hl(0, 'AnsiGreen', { link = 'MiniIconsGreen' })
 -- vim.api.nvim_set_hl(0, 'AnsiCyan', { link = 'MiniIconsCyan' })
 -- vim.api.nvim_set_hl(0, 'AnsiWhite', { link = 'MiniIconsWhite' })
 
+---@param buf integer
+---@param row integer?
 ---@return integer, any?
 function M.get_row(buf, row)
-  local row = row or vim.api.nvim_win_get_cursor(0)[1]
+  row = row or vim.api.nvim_win_get_cursor(0)[1]
   local sha = vim.api.nvim_buf_get_text(buf, row - 1, 0, row - 1, 7, {})[1]
 
   if sha == nil or sha:match '%s' ~= nil then return row, nil end
@@ -79,18 +81,19 @@ end
 ---@field timestamp integer
 ---@field message string
 
----@param opts {path: string}
+---@param opts {path: string, n: integer?}
 function M.open(opts)
+  opts = vim.tbl_extend('force', { n = 100 }, opts)
+
   local buf = vim.api.nvim_create_buf(true, true)
   vim.api.nvim_buf_set_name(buf, 'git-pack://' .. buf)
   vim.bo[buf].ft = 'gitlog'
-  local tab_page = vim.api.nvim_open_tabpage(buf, true, {})
-  local win = vim.api.nvim_get_current_win()
+  vim.api.nvim_open_tabpage(buf, true, {})
 
   -- TODO: Prevent pack jumplist
   vim.api.nvim_create_autocmd('WinClosed', {
     callback = function(ev)
-      if vim._tointeger(ev.match) ~= win then return end
+      if ev.buf ~= buf then return end
       vim.api.nvim_buf_delete(buf, { force = true })
       return true
     end,
