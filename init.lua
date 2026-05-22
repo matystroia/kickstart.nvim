@@ -10,6 +10,8 @@ vim.o.showmode = false
 -- Schedule the setting after `UiEnter` because it can increase startup-time.
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
+vim.o.shell = '/usr/bin/nu'
+
 vim.o.breakindent = true
 vim.o.autoindent = true
 vim.o.smartindent = true
