@@ -37,7 +37,6 @@ vim.keymap.set('n', '<Leader>ts', function()
   vim.cmd.vnew()
   vim.cmd.term()
   vim.cmd.wincmd 'J'
-  vim.api.nvim_win_set_height(0, 10)
 end)
 vim.keymap.set('t', '<C-h>', '<C-\\><C-n><C-w><C-h>')
 vim.keymap.set('t', '<C-j>', '<C-\\><C-n><C-w><C-j>')
