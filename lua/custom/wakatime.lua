@@ -1,4 +1,5 @@
-local today
+---@type {hours: integer, minutes: integer}?
+local today, today_display
 local interval = 10 * 60
 
 local function get_today()
@@ -6,6 +7,11 @@ local function get_today()
     local hours = tonumber(result.stdout:match '(%d+) hrs?') or 0
     local minutes = tonumber(result.stdout:match '(%d+) mins?') or 0
     today = { hours = hours, minutes = minutes }
+
+    local parts = {}
+    if hours > 0 then table.insert(parts, string.format('%sh', hours)) end
+    if minutes > 0 then table.insert(parts, string.format('%sm', minutes)) end
+    today_display = table.concat(parts, ' ')
   end)
 end
 
@@ -25,4 +31,5 @@ return {
     })
   end,
   today = function() return today end,
+  today_display = function() return today_display end,
 }

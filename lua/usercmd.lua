@@ -60,6 +60,19 @@ vim.api.nvim_create_user_command(
   { desc = 'Git commits in Neovim repo' }
 )
 
+vim.api.nvim_create_user_command('Session', function(opts)
+  local session = require 'custom.session'
+  if opts.fargs[1] == nil then
+    session.load_session()
+  elseif opts.fargs[1] == 'new' then
+    session.create_session()
+  elseif opts.fargs[1] == 'save' then
+    session.save_session()
+  else
+    vim.print 'Invalid command'
+  end
+end, { nargs = '?' })
+
 vim.api.nvim_create_user_command('ColorPicker', function()
   local n = 12
 

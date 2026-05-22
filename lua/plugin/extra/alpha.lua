@@ -32,6 +32,7 @@ return {
       type = 'group',
       val = {
         dashboard.button('e', '  New', ':ene | startinsert <CR>'),
+        dashboard.button('s', '  Session', ':Session<CR>'),
         dashboard.button(
           'c',
           '  Config',

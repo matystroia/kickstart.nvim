@@ -11,14 +11,8 @@ return {
         show_close_icon = false,
         custom_areas = {
           right = function()
-            local time = require('custom.wakatime').today()
-            if time == nil then return { { text = '? ' } } end
-
-            local ret = {}
-            if time.hours > 0 then ret[#ret + 1] = string.format('%sh', time.hours) end
-            if time.minutes > 0 then ret[#ret + 1] = string.format('%sm', time.minutes) end
-
-            return { { text = table.concat(ret, ' ') .. ' ' } }
+            local session = vim.v.this_session:match '.+/(.+)%.vim$'
+            return { { text = session }, { text = ' ' .. require('custom.wakatime').today_display() .. ' ' } }
           end,
         },
       },
