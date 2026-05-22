@@ -24,8 +24,8 @@ return {
     vim.keymap.set({ 'x', 'o' }, 'ic', function() select('@call.inner', 'textobjects') end)
     vim.keymap.set({ 'x', 'o' }, 'ac', function() select('@call.outer', 'textobjects') end)
 
-    vim.keymap.set({ 'x', 'o' }, 'al', function() select('@assignment.lhs', 'textobjects') end)
-    vim.keymap.set({ 'x', 'o' }, 'ar', function() select('@assignment.rhs', 'textobjects') end)
+    vim.keymap.set({ 'x', 'o' }, 'il', function() select('@assignment.lhs', 'textobjects') end)
+    vim.keymap.set({ 'x', 'o' }, 'ir', function() select('@assignment.rhs', 'textobjects') end)
 
     vim.keymap.set({ 'x', 'o' }, 'ia', function() select('@parameter.inner', 'textobjects') end)
     vim.keymap.set({ 'x', 'o' }, 'aa', function() select('@parameter.outer', 'textobjects') end)

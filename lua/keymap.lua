@@ -48,7 +48,6 @@ vim.keymap.set('t', '<C-l>', '<C-\\><C-n><C-w><C-l>')
 vim.keymap.set('n', '\\', '<Cmd>vsplit<CR>')
 vim.keymap.set('n', '|', '<Cmd>split<CR>')
 
-vim.keymap.set('n', '<Leader>a', 'ggVG')
 vim.keymap.set('n', '<Leader>tw', '<Cmd>set wrap!<CR>', { desc = '[T]oggle [W]rap' })
 
 vim.keymap.set('v', '<Leader>x', ':lua<CR>')
