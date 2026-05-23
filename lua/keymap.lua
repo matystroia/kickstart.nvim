@@ -31,17 +31,7 @@ vim.keymap.set('n', '<Tab>q', function()
   vim.iter(vim.api.nvim_list_bufs()):each(function(buf) vim.api.nvim_buf_delete(buf, { force = true }) end)
 end)
 
--- Terminal
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { noremap = true })
-vim.keymap.set('n', '<Leader>ts', function()
-  vim.cmd.vnew()
-  vim.cmd.term()
-  vim.cmd.wincmd 'J'
-end)
-vim.keymap.set('t', '<C-h>', '<C-\\><C-n><C-w><C-h>')
-vim.keymap.set('t', '<C-j>', '<C-\\><C-n><C-w><C-j>')
-vim.keymap.set('t', '<C-k>', '<C-\\><C-n><C-w><C-k>')
-vim.keymap.set('t', '<C-l>', '<C-\\><C-n><C-w><C-l>')
+vim.keymap.set('n', '<Leader>ts', '<Cmd>new | term<CR>')
 
 -- Splits
 vim.keymap.set('n', '\\', '<Cmd>vsplit<CR>')
