@@ -32,6 +32,7 @@ vim.keymap.set('n', '<Tab>q', function()
 end)
 
 vim.keymap.set('n', '<Leader>ts', '<Cmd>new | term<CR>')
+vim.keymap.set('t', '<C-Esc>', '<C-\\><C-n>')
 
 -- Splits
 vim.keymap.set('n', '\\', '<Cmd>vsplit<CR>')
