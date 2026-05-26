@@ -15,8 +15,8 @@ return {
 
     local select = require('nvim-treesitter-textobjects.select').select_textobject
 
-    vim.keymap.set({ 'x', 'o' }, 'if', function() select('@function.inner', 'textobjects') end)
-    vim.keymap.set({ 'x', 'o' }, 'af', function() select('@function.outer', 'textobjects') end)
+    vim.keymap.set({ 'x', 'o' }, 'im', function() select('@function.inner', 'textobjects') end)
+    vim.keymap.set({ 'x', 'o' }, 'am', function() select('@function.outer', 'textobjects') end)
 
     vim.keymap.set({ 'x', 'o' }, 'iC', function() select('@class.inner', 'textobjects') end)
     vim.keymap.set({ 'x', 'o' }, 'aC', function() select('@class.outer', 'textobjects') end)
@@ -43,10 +43,10 @@ return {
     local goto_prev_start = move.goto_previous_start
     local goto_prev_end = move.goto_previous_end
 
-    vim.keymap.set({ 'n', 'x', 'o' }, ']f', function() goto_next_start('@function.outer', 'textobjects') end)
-    vim.keymap.set({ 'n', 'x', 'o' }, ']F', function() goto_next_end('@function.outer', 'textobjects') end)
-    vim.keymap.set({ 'n', 'x', 'o' }, '[f', function() goto_prev_start('@function.outer', 'textobjects') end)
-    vim.keymap.set({ 'n', 'x', 'o' }, '[F', function() goto_prev_end('@function.outer', 'textobjects') end)
+    vim.keymap.set({ 'n', 'x', 'o' }, ']m', function() goto_next_start('@function.outer', 'textobjects') end)
+    vim.keymap.set({ 'n', 'x', 'o' }, ']M', function() goto_next_end('@function.outer', 'textobjects') end)
+    vim.keymap.set({ 'n', 'x', 'o' }, '[m', function() goto_prev_start('@function.outer', 'textobjects') end)
+    vim.keymap.set({ 'n', 'x', 'o' }, '[M', function() goto_prev_end('@function.outer', 'textobjects') end)
 
     vim.keymap.set({ 'n', 'x', 'o' }, ']s', function() goto_next_start('@statement.outer', 'textobjects') end)
     vim.keymap.set({ 'n', 'x', 'o' }, ']S', function() goto_next_end('@statement.outer', 'textobjects') end)
