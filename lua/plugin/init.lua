@@ -16,17 +16,10 @@ end
 
 ---@return string[]
 local function collect_mods()
-  local plug_dirs = { 'basic', 'extra', 'lang', 'lsp', 'ui' }
+  local plugs_dir = vim.fs.joinpath(vim.fn.stdpath 'config', 'lua/plugin/plugins')
   return vim
-    .iter(plug_dirs)
-    :map(function(mod)
-      local mod_path = vim.fs.joinpath(vim.fn.stdpath 'config', 'lua/plugin', mod)
-      return vim
-        .iter(vim.fs.dir(mod_path))
-        :map(function(name) return string.format('plugin.%s.%s', mod, name:gsub('%.lua$', '')) end)
-        :totable()
-    end)
-    :flatten()
+    .iter(vim.fs.dir(plugs_dir))
+    :map(function(name) return string.format('plugin.plugins.%s', name:gsub('%.lua$', '')) end)
     :totable()
 end
 
