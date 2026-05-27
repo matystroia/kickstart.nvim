@@ -30,7 +30,7 @@ end
 local function tick(buf)
   if buf ~= vim.api.nvim_win_get_buf(0) then return end
 
-  ---@type {types: string[]; render: fun(n: TSNode): string|nil; hl_group: string}[]
+  ---@type {types: string[], render: fun(n: TSNode): string|nil, hl_group: string}[]
   local node_types = {
     {
       types = { 'class_definition' },

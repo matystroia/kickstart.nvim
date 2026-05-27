@@ -4,15 +4,15 @@ local session_dir = vim.fs.joinpath(vim.fn.stdpath 'data', 'session')
 if not vim.uv.fs_stat(session_dir) then vim.uv.fs_mkdir(session_dir, tonumber('755', 8)) end
 
 function M.load_session()
-  local sessions = vim.fs.find(
-    function(name) return vim.endswith(name, '.vim') end,
-    { path = session_dir, type = 'file' }
-  )
+  local sessions = vim
+    .iter(vim.fs.dir(session_dir))
+    :filter(function(name, type) return type == 'file' and vim.endswith(name, '.vim') end)
+    :totable()
   vim.ui.select(
     sessions,
-    { kind = 'file', prompt = 'Session', format_item = function(item) return item:match '.+/(.+)%.vim$' end },
-    function(session)
-      if session ~= nil then vim.cmd.source(session) end
+    { kind = 'file', prompt = 'Session', format_item = function(item) return item[1] end },
+    function(item)
+      if item ~= nil then vim.cmd.source(vim.fs.joinpath(session_dir, item[1])) end
     end
   )
 end

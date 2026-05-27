@@ -28,10 +28,10 @@ local function collect_plugs()
   local mods ---@type string[]
   if vim.g.minimal or vim.g.started_by_firenvim then
     mods = {
-      'plugin.basic.leap',
-      'plugin.basic.mini-surround',
-      'plugin.basic.nvim-autopairs',
-      'plugin.basic.nvim-spider',
+      'plugin.plugins.leap',
+      'plugin.plugins.mini-surround',
+      'plugin.plugins.nvim-autopairs',
+      'plugin.plugins.nvim-spider',
     }
   else
     mods = collect_mods()

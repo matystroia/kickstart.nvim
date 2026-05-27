@@ -1,10 +1,7 @@
 vim.keymap.set('n', '<Leader>q', '<Cmd>q<CR>')
-vim.keymap.set('n', '<Leader>Q', '<Cmd>q!<CR>')
 vim.keymap.set('n', '<Leader>w', '<Cmd>silent w<CR>')
 
 -- Buffers
-vim.keymap.set('n', '<Tab>n', '<Cmd>bn<CR>')
-vim.keymap.set('n', '<Tab>p', '<Cmd>bp<CR>')
 vim.keymap.set('n', '<Right>', '<Cmd>bn<CR>')
 vim.keymap.set('n', '<Left>', '<Cmd>bp<CR>')
 vim.keymap.set('n', '<Tab>d', function()
@@ -41,7 +38,7 @@ vim.keymap.set('n', '|', '<Cmd>split<CR>')
 vim.keymap.set('n', '<Leader>tw', '<Cmd>set wrap!<CR>', { desc = '[T]oggle [W]rap' })
 
 vim.keymap.set('v', '<Leader>x', ':lua<CR>')
-vim.keymap.set('n', '<Leader>X', ':% lua<CR>')
+vim.keymap.set('n', '<Leader>X', ':%lua<CR>')
 
 vim.keymap.set('n', '<C-n>', '<Cmd>nohls<CR>')
 
@@ -79,9 +76,3 @@ vim.keymap.set({ 'i', 'c' }, '<Right>', '<Nop>')
 -- Completion
 vim.keymap.set('i', '<C-f>', '<C-X><C-F>')
 vim.keymap.set('i', '<C-l>', '<C-X><C-L>')
-
-vim.keymap.set({ 'n', 'v' }, '<Leader>/', function() return vim.api.nvim_get_mode().mode == 'n' and 'gcc' or 'gc' end, {
-  expr = true,
-  remap = true,
-  desc = 'Toggle comment',
-})
