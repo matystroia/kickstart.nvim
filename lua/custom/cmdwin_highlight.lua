@@ -24,7 +24,7 @@ end
 ---@param substitute string?
 ---@param flags string?
 ---@return any
-local function hl_pattern(buf, ln_range, ln_start, pattern, is_sub, substitute, flags)
+local function hl_pattern(buf, ln_range, pattern, is_sub, substitute, flags)
   local ok, re = pcall(vim.regex, pattern)
   if not ok then return end
 
@@ -44,13 +44,13 @@ local function hl_pattern(buf, ln_range, ln_start, pattern, is_sub, substitute, 
         ext_opts.hl_group = 'IncSearch'
       end
 
-      vim.api.nvim_buf_set_extmark(buf, ns, ln_start + i - 1, m[1], ext_opts)
+      vim.api.nvim_buf_set_extmark(buf, ns, ln_range[1] + i - 1, m[1], ext_opts)
 
       if substitute ~= nil then
         vim.api.nvim_buf_set_extmark(
           buf,
           ns,
-          ln_start + i - 1,
+          ln_range[1] + i - 1,
           m[2],
           { virt_text = { { substitute, 'Substitute' } }, virt_text_pos = 'inline' }
         )
@@ -75,19 +75,22 @@ vim.api.nvim_create_autocmd('CmdwinEnter', {
       local ln = vim.api.nvim_get_current_line():gsub('\\/', '\x1e')
 
       if cmd_type == '/' then
-        if ln ~= '' then hl_pattern(target_buf, { 0, -1 }, 0, ln:gsub('\x1e', '/'), false) end
+        if ln ~= '' then hl_pattern(target_buf, { 0, -1 }, ln:gsub('\x1e', '/'), false) end
         return
       end
 
-      local ln_range, ln_start
+      local ln_range
       if ln:match "^'<,'>s/" then
         local start, end_ = vim.api.nvim_buf_get_mark(target_buf, '<'), vim.api.nvim_buf_get_mark(target_buf, '>')
-        ln_range, ln_start = { start[1] - 1, end_[1] }, start[1] - 1
+        ln_range = { start[1] - 1, end_[1] }
+      elseif ln:match '^%d+,%d+s/' then
+        local start, end_ = ln:match '^(%d+),(%d+)s/'
+        ln_range = { tonumber(start) - 1, tonumber(end_) }
       elseif ln:match '^%%s/' then
-        ln_range, ln_start = { 0, -1 }, 0
+        ln_range = { 0, -1 }
       elseif ln:match '^s/' then
         local pos = vim.api.nvim_win_get_cursor(target_win)
-        ln_range, ln_start = { pos[1] - 1, pos[1] }, pos[1] - 1
+        ln_range = { pos[1] - 1, pos[1] }
       else
         return
       end
@@ -98,7 +101,11 @@ vim.api.nvim_create_autocmd('CmdwinEnter', {
       if pat ~= nil then pat = pat:gsub('\x1e', '/') end
       if s_pat ~= nil then s_pat = s_pat:gsub('\x1e', '/') end
 
-      hl_pattern(target_buf, ln_range, ln_start, pat, true, s_pat, flags)
+      if vim.bo[target_buf].modifiable then
+        hl_pattern(target_buf, ln_range, pat, true, s_pat, flags)
+      else
+        hl_pattern(target_buf, ln_range, pat, false, nil, flags)
+      end
     end
 
     local cole = vim.wo[target_win].conceallevel
