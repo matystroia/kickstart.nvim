@@ -151,6 +151,21 @@ return {
       tailwindcss = {},
       nushell = {},
       clangd = {},
+      nixd = {
+        settings = {
+          formatter = { cmd = { 'nixfmt' } },
+        },
+      },
+      taplo = {},
+      sqruff = {},
+      sqls = {
+        on_attach = function(client, bufnr)
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+        end,
+        cmd = { 'sqls', '-c', 'sqls.yml' },
+        root_markers = { 'sqls.yml' },
+      },
     }
 
     for server, config in pairs(servers) do

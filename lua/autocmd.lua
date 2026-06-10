@@ -1,11 +1,15 @@
 -- require 'custom.cmdwin_highlight'
 
-vim.api.nvim_create_autocmd({ 'TextYankPost', 'TextPutPost' }, {
+vim.api.nvim_create_autocmd(vim.fn.has('nvim-0.13.0') == 1 and { 'TextYankPost', 'TextPutPost' } or 'TextYankPost', {
   desc = 'Highlight when yanking',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function(ev)
-    local hl = ev.event == 'TextYankPost' and 'IncSearch' or 'DiffAdd'
-    vim.hl.hl_op { higroup = hl }
+    if vim.fn.has('nvim-0.13.0') then
+      local hl = ev.event == 'TextYankPost' and 'IncSearch' or 'DiffAdd'
+      vim.hl.hl_op { higroup = hl }
+    else
+      vim.hl.on_yank()
+    end
   end,
 })
 

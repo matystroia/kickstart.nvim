@@ -4,7 +4,7 @@ vim.keymap.set('n', '<Leader>w', '<Cmd>silent w<CR>')
 -- Buffers
 vim.keymap.set('n', '<Right>', '<Cmd>bn<CR>')
 vim.keymap.set('n', '<Left>', '<Cmd>bp<CR>')
-vim.keymap.set('n', '<Tab>d', function()
+vim.keymap.set('n', '<Leader>d', function()
   local buf = vim.api.nvim_win_get_buf(0)
 
   local alt_bufs = vim

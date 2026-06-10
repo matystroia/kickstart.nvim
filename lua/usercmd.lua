@@ -73,6 +73,39 @@ vim.api.nvim_create_user_command('Session', function(opts)
   end
 end, { nargs = '?' })
 
+vim.api.nvim_create_user_command('Screenshot', function(opts)
+  if opts.range == 0 then return end
+
+  local html = require('tohtml').tohtml(0, { range = { opts.line1, opts.line2 }, number_lines = true })
+  local file = io.open('/tmp/nvim.html', 'w')
+  if file == nil then return end
+  file:write(vim.iter(html):join '\n')
+  file:flush()
+  file:close()
+
+  vim
+    .system({
+      'sed',
+      '-i',
+      's/<style>/<style>html{background-color:#92b3e8}body{border-radius:10px;padding:15px}/',
+      '/tmp/nvim.html',
+    })
+    :wait()
+
+  vim
+    .system({
+      'sed',
+      '-ri',
+      's/<pre>[^\n]+/<pre>/',
+      '/tmp/nvim.html',
+    })
+    :wait()
+
+  vim.system({ 'wkhtmltoimage', '--quality', '100', '/tmp/nvim.html', '/tmp/nvim.png' }):wait()
+  vim.system { 'sh', '-c', 'cat /tmp/nvim.png | wl-copy' }
+  vim.print 'Copied to clipboard'
+end, { nargs = 0, range = true, desc = 'Copy code screenshot to clipboard' })
+
 vim.api.nvim_create_user_command('ColorPicker', function()
   local n = 12
 
